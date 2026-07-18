@@ -404,6 +404,86 @@ Calculate EMI
 
 </section>
 
+<!-- ===================================
+     LOAN ELIGIBILITY CHECKER
+=================================== -->
+
+<section id="eligibility" class="eligibility-section">
+
+    <div class="container">
+
+        <div class="section-heading">
+
+            <span>ELIGIBILITY CHECKER</span>
+
+            <h2>Check Your Loan Eligibility</h2>
+
+            <p>Fill in the details below to check your loan eligibility instantly.</p>
+
+        </div>
+
+        <div class="eligibility-card">
+
+            <div class="input-group">
+                <label>Employment Type</label>
+                <select id="employmentType">
+                    <option value="">Select</option>
+                    <option value="Salaried">Salaried</option>
+                    <option value="Business">Business</option>
+                    <option value="Professional">Professional</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Monthly Income (₹)</label>
+                <input type="number" id="monthlyIncome" placeholder="50000">
+            </div>
+
+            <div class="input-group">
+                <label>Existing Monthly EMI (₹)</label>
+                <input type="number" id="existingEmi" placeholder="10000">
+            </div>
+
+            <div class="input-group">
+                <label>CIBIL Score</label>
+                <select id="cibilScore">
+                    <option value="">Select</option>
+                    <option value="750">750+</option>
+                    <option value="700">700 - 749</option>
+                    <option value="650">650 - 699</option>
+                    <option value="600">Below 650</option>
+                    <option value="0">Don't Know</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Loan Type</label>
+                <select id="loanType">
+                    <option value="">Select</option>
+                    <option>Home Loan</option>
+                    <option>LAP</option>
+                    <option>Business Loan</option>
+                    <option>MSME Loan</option>
+                    <option>Personal Loan</option>
+                    <option>Vehicle Loan</option>
+                </select>
+            </div>
+
+            <button class="calculate-btn" onclick="checkEligibility()">
+                Check Eligibility
+            </button>
+
+            <div class="eligibility-result">
+                <h3 id="eligibilityResult">Please fill your details.</h3>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
 
 
   <!-- ==========================
