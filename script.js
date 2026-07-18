@@ -153,3 +153,49 @@ document.getElementById("loanForm").addEventListener("submit", function (e) {
 
 });
 
+
+/* ===================================
+   HEADER VERSION 2.0
+=================================== */
+
+const menuToggle = document.getElementById("menuToggle");
+const navbar = document.getElementById("navbar");
+
+if (menuToggle && navbar) {
+
+    menuToggle.addEventListener("click", function () {
+
+        navbar.classList.toggle("mobile-active");
+
+        if (navbar.classList.contains("mobile-active")) {
+
+            menuToggle.innerHTML =
+                '<i class="fa-solid fa-xmark"></i>';
+
+        } else {
+
+            menuToggle.innerHTML =
+                '<i class="fa-solid fa-bars"></i>';
+
+        }
+
+    });
+
+}
+
+
+// Close menu after clicking any menu item
+
+document.querySelectorAll(".navbar a").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navbar.classList.remove("mobile-active");
+
+        menuToggle.innerHTML =
+            '<i class="fa-solid fa-bars"></i>';
+
+    });
+
+});
+
