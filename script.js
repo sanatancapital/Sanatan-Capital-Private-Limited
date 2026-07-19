@@ -3,29 +3,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 1. Set Copyright Year ---
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // --- 2. Mobile Menu Toggle ---
+    // --- 2. Mobile Menu Toggle (Accessibility Improved) ---
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const links = document.querySelectorAll('.nav-links a');
 
-    hamburger.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        const icon = hamburger.querySelector('i');
-        if(navLinks.classList.contains('active')){
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
+    const toggleMenu = (isOpen) => {
+        if(isOpen) {
+            navLinks.classList.add('active');
+            hamburger.querySelector('i').classList.replace('fa-bars', 'fa-times');
+            hamburger.setAttribute('aria-expanded', 'true');
         } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+            navLinks.classList.remove('active');
+            hamburger.querySelector('i').classList.replace('fa-times', 'fa-bars');
+            hamburger.setAttribute('aria-expanded', 'false');
         }
+    };
+
+    hamburger.addEventListener('click', () => {
+        const isActive = navLinks.classList.contains('active');
+        toggleMenu(!isActive);
     });
 
     links.forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            hamburger.querySelector('i').classList.remove('fa-times');
-            hamburger.querySelector('i').classList.add('fa-bars');
-        });
+        link.addEventListener('click', () => toggleMenu(false));
     });
 
     // --- 3. Sticky Header & Scroll to Top ---
@@ -33,6 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollTopBtn = document.getElementById('scrollTop');
 
     window.addEventListener('scroll', () => {
+        // Debouncing/Throttling is generally recommended for performance, 
+        // but for simple class toggles on scrollY, modern browsers handle this efficiently.
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
@@ -50,15 +53,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // --- 4. Scroll Reveal Animation ---
+    // --- 4. Scroll Reveal Animation (Performance Optimized) ---
     const revealElements = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
     
     const revealCallback = (entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                // Optional: Stop observing once revealed
-                // observer.unobserve(entry.target);
+                // Observe once and then stop tracking for better performance
+                observer.unobserve(entry.target);
             }
         });
     };
@@ -79,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         counters.forEach(counter => {
             const target = +counter.getAttribute('data-target');
             const duration = 2000; // 2 seconds
-            const increment = target / (duration / 16); // 60fps
+            const increment = target / (duration / 16); // ~60fps
             
             let current = 0;
             const updateCounter = () => {
@@ -105,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if(counterSection) counterObserver.observe(counterSection);
 
-    // --- 6. FAQ Accordion ---
+    // --- 6. FAQ Accordion (Accessibility Improved) ---
     const faqItems = document.querySelectorAll('.faq-question');
     
     faqItems.forEach(item => {
@@ -115,12 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
             // Close all answers
             faqItems.forEach(btn => {
                 btn.classList.remove('active');
+                btn.setAttribute('aria-expanded', 'false');
                 btn.nextElementSibling.style.maxHeight = null;
             });
 
             // If it wasn't active, open it
             if (!isActive) {
                 item.classList.add('active');
+                item.setAttribute('aria-expanded', 'true');
                 const answer = item.nextElementSibling;
                 answer.style.maxHeight = answer.scrollHeight + "px";
             }
@@ -180,38 +185,99 @@ document.addEventListener('DOMContentLoaded', () => {
     syncInputs(rateRange, rateInput);
     syncInputs(tenureRange, tenureInput);
 
-    // Initial calculation
+    // Initial calculation setup
     calculateEMI();
 
-    // --- 8. Form Validation & Mock Submit ---
+    // --- 8. Modular Google Sheets Ready Lead Form Submission ---
     const applyForm = document.getElementById('loan-form');
     const formMsg = document.getElementById('form-message');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // To connect to Google Sheets later:
+    // 1. Create a Google Apps Script Web App
+    // 2. Replace 'YOUR_GOOGLE_SCRIPT_URL_HERE' with the generated Web App URL
+    const googleAppScriptURL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+    const submitLeadData = async (formData) => {
+        // This function handles the actual data transmission.
+        // It uses FormData, which seamlessly integrates with Google Apps Script (doPost).
+        
+        try {
+            /* 
+            // Uncomment this block when your Google Sheet Web App is ready:
+            
+            const response = await fetch(googleAppScriptURL, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            
+            if(result.result === 'success') {
+                return true;
+            } else {
+                throw new Error('Script returned error');
+            }
+            */
+            
+            // Simulating a successful network request for now
+            return new Promise(resolve => setTimeout(() => resolve(true), 1500));
+        } catch (error) {
+            console.error("Form Submission Error: ", error);
+            return false;
+        }
+    };
 
     if(applyForm) {
-        applyForm.addEventListener('submit', (e) => {
+        applyForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = applyForm.querySelector('button');
-            const originalText = btn.textContent;
             
-            btn.textContent = "Submitting...";
-            btn.disabled = true;
+            // Basic UI loading state
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "Submitting securely...";
+            submitBtn.disabled = true;
+            formMsg.textContent = "";
 
-            // Mock API delay
-            setTimeout(() => {
+            // Collect form data
+            const formData = new FormData(applyForm);
+            
+            // Optional: You can do extra validation here if HTML5 isn't enough
+            const mobile = formData.get('phone');
+            if(mobile.length !== 10) {
+                formMsg.textContent = "Please enter a valid 10-digit mobile number.";
+                formMsg.style.color = "red";
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Transmit Data
+            const success = await submitLeadData(formData);
+
+            if (success) {
                 formMsg.textContent = "Application Submitted Successfully! Our team will contact you soon.";
                 formMsg.style.color = "#25D366"; // Success green
                 applyForm.reset();
-                btn.textContent = originalText;
-                btn.disabled = false;
-                
-                setTimeout(() => { formMsg.textContent = ""; }, 5000);
-            }, 1500);
+            } else {
+                formMsg.textContent = "Something went wrong. Please try calling us directly.";
+                formMsg.style.color = "red";
+            }
+
+            // Restore button state
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            
+            // Clear success message after 5 seconds
+            setTimeout(() => { 
+                if(formMsg.style.color === "rgb(37, 211, 102)" || formMsg.style.color === "#25D366") {
+                    formMsg.textContent = ""; 
+                }
+            }, 5000);
         });
     }
 });
 
 // --- 9. Eligibility Checker Logic (Global Function for onclick) ---
-function calculateEligibility() {
+window.calculateEligibility = function() {
     const income = parseFloat(document.getElementById('elig-income').value);
     const existingEmi = parseFloat(document.getElementById('elig-emi').value) || 0;
     const rate = parseFloat(document.getElementById('elig-rate').value);
@@ -229,7 +295,7 @@ function calculateEligibility() {
 
     if (maxEmiCapacity <= 0) {
         resultDiv.style.display = 'block';
-        maxLoanDisplay.textContent = "Not Eligible";
+        maxLoanDisplay.textContent = "Not Eligible based on current EMI obligations.";
         maxLoanDisplay.style.color = "red";
         return;
     }
@@ -249,4 +315,4 @@ function calculateEligibility() {
         currency: 'INR',
         maximumFractionDigits: 0
     }).format(Math.round(maxLoan));
-}
+};
