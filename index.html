@@ -3,8 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- SEO Meta Tags -->
     <title>Sanatan Capital Private Limited | Premium DSA & Loan Distribution</title>
-    <meta name="description" content="Sanatan Capital is a premier Loan Distribution/DSA company. We connect you with top partner banks and NBFCs for Home, Business, and Personal loans.">
+    <meta name="description" content="Sanatan Capital is a premier Loan Distribution/DSA company. We connect you with top RBI-approved partner banks and NBFCs for Home, Business, MSME, Vehicle, and Personal loans.">
+    <meta name="keywords" content="DSA, Loan Distribution, Home Loan, Business Loan, MSME Loan, Vehicle Loan, Property Loan, Sanatan Capital">
+    <meta name="author" content="Sanatan Capital Private Limited">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Sanatan Capital Private Limited | Trusted Loan Distributor">
+    <meta property="og:description" content="Connecting you with top RBI-approved partner Banks and NBFCs for the best loan offers. आपका विश्वास हमारा संकल्प">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.sanatancapital.com">
+    <meta property="og:image" content="assets/logo-horizontal.png">
+    
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Sanatan Capital | Premium DSA">
+    <meta name="twitter:description" content="Your Trusted Bridge to Financial Solutions. DSA Partner for top banks and NBFCs.">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FinancialService",
+      "name": "Sanatan Capital Private Limited",
+      "description": "Premium DSA and Loan Distribution Company.",
+      "url": "https://www.sanatancapital.com",
+      "logo": "https://www.sanatancapital.com/assets/logo-horizontal.png",
+      "telephone": "+91-9664223901",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Near Central Bank, Mahaveer Colony, Kher Road",
+        "addressLocality": "Balotra",
+        "addressRegion": "Rajasthan",
+        "postalCode": "344022",
+        "addressCountry": "IN"
+      },
+      "slogan": "आपका विश्वास हमारा संकल्प"
+    }
+    </script>
+
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,21 +52,21 @@
 <body>
 
     <!-- Header & Navigation -->
-    <header id="header" class="header">
-        <nav class="navbar container">
-            <a href="#" class="logo">
-                <img src="assets/logo-horizontal.png" alt="Sanatan Capital Logo" onerror="this.src='assets/logo.png'; this.alt='Sanatan Capital';">
+    <header id="header" class="header" role="banner">
+        <nav class="navbar container" aria-label="Main Navigation">
+            <a href="#" class="logo" aria-label="Sanatan Capital Home">
+                <img src="assets/logo-horizontal.png" alt="Sanatan Capital Logo">
             </a>
-            <div class="nav-links">
+            <div class="nav-links" role="navigation">
                 <a href="#home">Home</a>
                 <a href="#about">About</a>
                 <a href="#products">Loans</a>
                 <a href="#tools">Calculators</a>
                 <a href="#contact">Contact</a>
-                <a href="#apply" class="btn btn-primary">Apply Now</a>
+                <a href="#apply" class="btn btn-primary" aria-label="Apply Now for a Loan">Apply Now</a>
             </div>
-            <div class="hamburger">
-                <i class="fas fa-bars"></i>
+            <div class="hamburger" aria-label="Toggle Navigation Menu" tabindex="0" aria-expanded="false">
+                <i class="fas fa-bars" aria-hidden="true"></i>
             </div>
         </nav>
     </header>
@@ -39,15 +77,16 @@
             <div class="hero-content reveal-left">
                 <div class="badge">Premium Loan Distribution Partner</div>
                 <h1>Empowering Your Financial Future</h1>
+                <p class="tagline text-secondary mb-4" style="font-size: 1.25rem; font-weight: 600;">आपका विश्वास हमारा संकल्प</p>
                 <p>Sanatan Capital connects you with top RBI-approved partner Banks and NBFCs to secure the best loan offers tailored to your needs. Fast processing, transparent terms, and dedicated support.</p>
                 <div class="hero-buttons">
                     <a href="#apply" class="btn btn-primary">Get Started <i class="fas fa-arrow-right"></i></a>
-                    <a href="#tools" class="btn btn-outline">Calculate EMI</a>
+                    <a href="#tools" class="btn btn-outline">Check Eligibility</a>
                 </div>
                 <p class="disclaimer"><i class="fas fa-shield-alt"></i> We are a DSA company. Loans are processed & disbursed by our partner financial institutions.</p>
             </div>
             <div class="hero-image reveal-right">
-                <img src="assets/hero-illustration.png" alt="Financial Growth Illustration" onerror="this.style.display='none'">
+                <img src="assets/hero-illustration.png" alt="Financial Growth Illustration" loading="eager">
             </div>
         </div>
     </section>
@@ -56,7 +95,7 @@
     <section id="about" class="about section bg-light">
         <div class="container about-container">
             <div class="about-image reveal-left">
-                <img src="assets/About Us.png" alt="About Sanatan Capital" onerror="this.style.display='none'">
+                <img src="assets/about-us.png" alt="About Sanatan Capital Team" loading="lazy">
             </div>
             <div class="about-content reveal-right">
                 <h4 class="section-subtitle">Who We Are</h4>
@@ -72,7 +111,7 @@
         </div>
     </section>
 
-    <!-- Loan Products -->
+    <!-- Detailed Loan Products Summary -->
     <section id="products" class="products section">
         <div class="container">
             <div class="section-header reveal-up">
@@ -80,39 +119,105 @@
                 <h2 class="section-title">Comprehensive Loan Products</h2>
                 <p>Explore our diverse portfolio of loan products sourced through top lending partners.</p>
             </div>
-            <img src="assets/Loan Products.png" alt="Loan Products" class="section-banner reveal-up" onerror="this.style.display='none'">
+            <div class="banner-wrapper reveal-up">
+                <img src="assets/loan-products.png" alt="Loan Products Banner" class="section-banner" loading="lazy">
+            </div>
             
             <div class="product-grid">
-                <!-- Product Cards -->
                 <div class="card product-card reveal-up">
                     <div class="card-icon"><i class="fas fa-home"></i></div>
                     <h3>Home Loan</h3>
-                    <p>Build your dream home with attractive interest rates and flexible repayment tenures.</p>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Purchase Home</li>
+                        <li><i class="fas fa-angle-right"></i> Construction & Renovation</li>
+                        <li><i class="fas fa-angle-right"></i> Balance Transfer</li>
+                        <li><i class="fas fa-angle-right"></i> PMAY Assistance</li>
+                    </ul>
                 </div>
                 <div class="card product-card reveal-up" style="transition-delay: 0.1s;">
                     <div class="card-icon"><i class="fas fa-briefcase"></i></div>
                     <h3>Business Loan</h3>
-                    <p>Fuel your business expansion with unsecured working capital and term loans.</p>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Shop & Factory</li>
+                        <li><i class="fas fa-angle-right"></i> Hotel & Restaurant</li>
+                        <li><i class="fas fa-angle-right"></i> Manufacturing & Warehouse</li>
+                        <li><i class="fas fa-angle-right"></i> Retail & Wholesale</li>
+                    </ul>
                 </div>
                 <div class="card product-card reveal-up" style="transition-delay: 0.2s;">
                     <div class="card-icon"><i class="fas fa-industry"></i></div>
                     <h3>MSME Loan</h3>
-                    <p>Specialized lending solutions designed for micro, small, and medium enterprises.</p>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Working Capital</li>
+                        <li><i class="fas fa-angle-right"></i> Machinery Purchase</li>
+                        <li><i class="fas fa-angle-right"></i> Business Expansion</li>
+                    </ul>
                 </div>
                 <div class="card product-card reveal-up" style="transition-delay: 0.3s;">
                     <div class="card-icon"><i class="fas fa-building"></i></div>
-                    <h3>Loan Against Property</h3>
-                    <p>Unlock the value of your commercial or residential real estate for large fund requirements.</p>
+                    <h3>Property Solutions</h3>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Loan Against Property (LAP)</li>
+                        <li><i class="fas fa-angle-right"></i> Property Buy & Sell Finance</li>
+                        <li><i class="fas fa-angle-right"></i> Construction Finance</li>
+                        <li><i class="fas fa-angle-right"></i> Property Consultation</li>
+                    </ul>
                 </div>
                 <div class="card product-card reveal-up" style="transition-delay: 0.4s;">
-                    <div class="card-icon"><i class="fas fa-user"></i></div>
-                    <h3>Personal Loan</h3>
-                    <p>Quick, hassle-free funding for medical emergencies, weddings, or personal needs.</p>
-                </div>
-                <div class="card product-card reveal-up" style="transition-delay: 0.5s;">
                     <div class="card-icon"><i class="fas fa-car"></i></div>
                     <h3>Vehicle Loan</h3>
-                    <p>Drive home your new or pre-owned commercial/personal vehicle with easy financing.</p>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Car Loan</li>
+                        <li><i class="fas fa-angle-right"></i> Bike/Two-Wheeler Loan</li>
+                        <li><i class="fas fa-angle-right"></i> Tractor & Commercial Vehicle</li>
+                    </ul>
+                </div>
+                <div class="card product-card reveal-up" style="transition-delay: 0.5s;">
+                    <div class="card-icon"><i class="fas fa-user"></i></div>
+                    <h3>Personal Loan</h3>
+                    <ul class="sub-list">
+                        <li><i class="fas fa-angle-right"></i> Medical Emergencies</li>
+                        <li><i class="fas fa-angle-right"></i> Higher Education</li>
+                        <li><i class="fas fa-angle-right"></i> Wedding & Travel</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories & Uses Section -->
+    <section class="categories-uses section bg-light">
+        <div class="container">
+            <div class="grid-2-col">
+                <div class="reveal-left">
+                    <h4 class="section-subtitle">Who Can Apply?</h4>
+                    <h2 class="section-title mb-4">Eligible Applicants</h2>
+                    <div class="pill-grid">
+                        <span class="pill"><i class="fas fa-store"></i> Shopkeeper</span>
+                        <span class="pill"><i class="fas fa-hard-hat"></i> Contractor</span>
+                        <span class="pill"><i class="fas fa-user-tie"></i> Business Owner</span>
+                        <span class="pill"><i class="fas fa-laptop"></i> Self Employed</span>
+                        <span class="pill"><i class="fas fa-id-badge"></i> Salary Person</span>
+                        <span class="pill"><i class="fas fa-hammer"></i> Daily Wage Worker</span>
+                        <span class="pill"><i class="fas fa-user-md"></i> Professional</span>
+                        <span class="pill"><i class="fas fa-tractor"></i> Farmer</span>
+                        <span class="pill"><i class="fas fa-truck"></i> Transport Business</span>
+                    </div>
+                </div>
+                <div class="reveal-right">
+                    <h4 class="section-subtitle">End Uses</h4>
+                    <h2 class="section-title mb-4">Common Loan Uses</h2>
+                    <div class="pill-grid">
+                        <span class="pill-alt"><i class="fas fa-chart-line"></i> Business Expansion</span>
+                        <span class="pill-alt"><i class="fas fa-store-alt"></i> Shop Purchase</span>
+                        <span class="pill-alt"><i class="fas fa-cogs"></i> Machine Purchase</span>
+                        <span class="pill-alt"><i class="fas fa-tools"></i> Construction</span>
+                        <span class="pill-alt"><i class="fas fa-home"></i> Home Buy/Build</span>
+                        <span class="pill-alt"><i class="fas fa-wallet"></i> Working Capital</span>
+                        <span class="pill-alt"><i class="fas fa-car"></i> Vehicle Purchase</span>
+                        <span class="pill-alt"><i class="fas fa-notes-medical"></i> Medical Expense</span>
+                        <span class="pill-alt"><i class="fas fa-graduation-cap"></i> Education</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -121,7 +226,8 @@
     <!-- Why Choose Us & Counters -->
     <section class="why-us section bg-dark text-white">
         <div class="container">
-            <div class="stats-grid">
+            <!-- Counters -->
+            <div class="stats-grid mb-5">
                 <div class="stat-item reveal-up">
                     <h2 class="counter" data-target="500">0</h2><span>+</span>
                     <p>Crores Disbursed</p>
@@ -139,68 +245,128 @@
                     <p>Approval Rate</p>
                 </div>
             </div>
+            
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 3rem 0;">
+            
+            <!-- Features Grid -->
+            <div class="section-header reveal-up text-center w-100">
+                <h4 class="section-subtitle text-secondary">Our Advantages</h4>
+                <h2 class="section-title text-white">Why Choose Sanatan Capital?</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-box reveal-up">
+                    <i class="fas fa-percent text-secondary"></i>
+                    <h4>Low Interest</h4>
+                    <p>Competitive rates from top banks.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.1s;">
+                    <i class="fas fa-bolt text-secondary"></i>
+                    <h4>Fast Processing</h4>
+                    <p>Quick turnaround and approvals.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.2s;">
+                    <i class="fas fa-search text-secondary"></i>
+                    <h4>Transparent Process</h4>
+                    <p>No hidden charges, 100% clarity.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.3s;">
+                    <i class="fas fa-shield-alt text-secondary"></i>
+                    <h4>Secure</h4>
+                    <p>Your data is protected and safe.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.4s;">
+                    <i class="fas fa-file-alt text-secondary"></i>
+                    <h4>Minimal Documents</h4>
+                    <p>Hassle-free paperwork.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.5s;">
+                    <i class="fas fa-headset text-secondary"></i>
+                    <h4>Dedicated Support</h4>
+                    <p>Expert guidance at every step.</p>
+                </div>
+                <div class="feature-box reveal-up" style="transition-delay: 0.6s;">
+                    <i class="fas fa-calendar-check text-secondary"></i>
+                    <h4>Flexible EMI</h4>
+                    <p>Repayment plans that suit you.</p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Loan Process -->
+    <!-- Loan Process (5 Steps) -->
     <section class="process section bg-light">
         <div class="container process-container">
             <div class="process-content reveal-left">
                 <h4 class="section-subtitle">How It Works</h4>
-                <h2 class="section-title">Simplified Loan Process</h2>
+                <h2 class="section-title">Simplified 5-Step Loan Process</h2>
                 <div class="process-steps">
                     <div class="step">
                         <div class="step-number">1</div>
                         <div>
-                            <h4>Apply & Consult</h4>
-                            <p>Submit your details. Our experts will assess your requirements.</p>
+                            <h4>Apply</h4>
+                            <p>Submit your details online or contact our experts to start.</p>
                         </div>
                     </div>
+                    <div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
                     <div class="step">
                         <div class="step-number">2</div>
                         <div>
-                            <h4>Document Collection</h4>
-                            <p>We collect and verify all necessary documents for bank submission.</p>
+                            <h4>Document Verification</h4>
+                            <p>We collect and rigorously verify all your necessary KYC and income documents.</p>
                         </div>
                     </div>
+                    <div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
                     <div class="step">
                         <div class="step-number">3</div>
                         <div>
-                            <h4>Bank Processing</h4>
-                            <p>Your profile is sent to partner banks for fast-track processing and approval.</p>
+                            <h4>Eligibility Check</h4>
+                            <p>Your profile is matched with the best RBI-approved lending partners.</p>
                         </div>
                     </div>
+                    <div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
                     <div class="step">
                         <div class="step-number">4</div>
                         <div>
-                            <h4>Disbursal</h4>
-                            <p>Loan amount is credited directly to your bank account by the lender.</p>
+                            <h4>Approval</h4>
+                            <p>The partner bank/NBFC sanctions your loan after successful evaluation.</p>
+                        </div>
+                    </div>
+                    <div class="step-arrow"><i class="fas fa-arrow-down"></i></div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <h4>Disbursement</h4>
+                            <p>The sanctioned loan amount is directly credited to your bank account.</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="process-image reveal-right">
-                <img src="assets/Loan Process.png" alt="Loan Process Steps" onerror="this.style.display='none'">
+            <div class="process-image reveal-right" style="align-self: center;">
+                <img src="assets/loan-process.png" alt="Loan Process Steps" loading="lazy">
             </div>
         </div>
     </section>
 
-    <!-- Required Documents -->
+    <!-- Required Documents Detailed -->
     <section class="documents section">
         <div class="container docs-container">
             <div class="docs-image reveal-left">
-                <img src="assets/Documents.png" alt="Required Documents" onerror="this.style.display='none'">
+                <img src="assets/required-documents.png" alt="Required Documents Checklist" loading="lazy">
             </div>
             <div class="docs-content reveal-right">
                 <h4 class="section-subtitle">Be Prepared</h4>
-                <h2 class="section-title">Required Documents</h2>
+                <h2 class="section-title">Comprehensive Document Checklist</h2>
                 <div class="glass-card">
-                    <ul class="doc-list">
-                        <li><i class="fas fa-id-card"></i> <strong>KYC Documents:</strong> PAN Card, Aadhaar Card, Passport/Voter ID.</li>
-                        <li><i class="fas fa-file-invoice-dollar"></i> <strong>Income Proof:</strong> Last 3 months Salary Slips, Form 16 (Salaried), 3 years ITR (Self-Employed).</li>
-                        <li><i class="fas fa-university"></i> <strong>Bank Statements:</strong> Last 6 months bank statement showing income/salary credit.</li>
-                        <li><i class="fas fa-briefcase"></i> <strong>Business Proof:</strong> GST Registration, MSME Certificate (for Business Loans).</li>
-                        <li><i class="fas fa-home"></i> <strong>Property Papers:</strong> Chain of property documents (for LAP/Home Loans).</li>
+                    <ul class="doc-list detailed-docs">
+                        <li><i class="fas fa-id-card"></i> <strong>Aadhaar Card:</strong> Mandatory for KYC.</li>
+                        <li><i class="fas fa-address-card"></i> <strong>PAN Card:</strong> Required for financial tracking.</li>
+                        <li><i class="fas fa-camera"></i> <strong>Passport Size Photo:</strong> Recent color photographs.</li>
+                        <li><i class="fas fa-university"></i> <strong>Bank Statement:</strong> Last 6 to 12 months reflecting income.</li>
+                        <li><i class="fas fa-file-invoice-dollar"></i> <strong>Income Proof:</strong> Salary Slips / Form 16 / ITR.</li>
+                        <li><i class="fas fa-briefcase"></i> <strong>Business Proof:</strong> GST Certificate / Trade License.</li>
+                        <li><i class="fas fa-certificate"></i> <strong>Udyam Registration:</strong> Specifically for MSME loans.</li>
+                        <li><i class="fas fa-home"></i> <strong>Property Papers:</strong> Title deed, chain documents (for LAP/Home Loan).</li>
+                        <li><i class="fas fa-car"></i> <strong>Vehicle RC & Insurance:</strong> For commercial or personal vehicle loans.</li>
                     </ul>
                 </div>
             </div>
@@ -220,19 +386,19 @@
                 <div class="card calc-card reveal-up">
                     <h3>EMI Calculator</h3>
                     <div class="form-group">
-                        <label>Loan Amount (₹)</label>
-                        <input type="range" id="emi-amount-range" min="100000" max="50000000" step="50000" value="1000000">
-                        <input type="number" id="emi-amount" value="1000000">
+                        <label for="emi-amount">Loan Amount (₹)</label>
+                        <input type="range" id="emi-amount-range" min="100000" max="50000000" step="50000" value="1000000" aria-label="Loan Amount Range">
+                        <input type="number" id="emi-amount" value="1000000" aria-label="Loan Amount Number">
                     </div>
                     <div class="form-group">
-                        <label>Interest Rate (% p.a.)</label>
-                        <input type="range" id="emi-rate-range" min="5" max="30" step="0.1" value="8.5">
-                        <input type="number" id="emi-rate" value="8.5">
+                        <label for="emi-rate">Interest Rate (% p.a.)</label>
+                        <input type="range" id="emi-rate-range" min="5" max="30" step="0.1" value="8.5" aria-label="Interest Rate Range">
+                        <input type="number" id="emi-rate" value="8.5" aria-label="Interest Rate Number">
                     </div>
                     <div class="form-group">
-                        <label>Tenure (Years)</label>
-                        <input type="range" id="emi-tenure-range" min="1" max="30" step="1" value="15">
-                        <input type="number" id="emi-tenure" value="15">
+                        <label for="emi-tenure">Tenure (Years)</label>
+                        <input type="range" id="emi-tenure-range" min="1" max="30" step="1" value="15" aria-label="Tenure Range">
+                        <input type="number" id="emi-tenure" value="15" aria-label="Tenure Number">
                     </div>
                     <div class="calc-results">
                         <div class="result-box">
@@ -250,20 +416,20 @@
                 <div class="card calc-card reveal-up" style="transition-delay: 0.2s;">
                     <h3>Eligibility Checker</h3>
                     <div class="form-group">
-                        <label>Net Monthly Income (₹)</label>
-                        <input type="number" id="elig-income" placeholder="e.g. 50000">
+                        <label for="elig-income">Net Monthly Income (₹)</label>
+                        <input type="number" id="elig-income" placeholder="e.g. 50000" aria-label="Net Monthly Income">
                     </div>
                     <div class="form-group">
-                        <label>Existing Monthly EMIs (₹)</label>
-                        <input type="number" id="elig-emi" placeholder="e.g. 5000" value="0">
+                        <label for="elig-emi">Existing Monthly EMIs (₹)</label>
+                        <input type="number" id="elig-emi" placeholder="e.g. 5000" value="0" aria-label="Existing EMIs">
                     </div>
                     <div class="form-group">
-                        <label>Expected Interest Rate (%)</label>
-                        <input type="number" id="elig-rate" value="10.5">
+                        <label for="elig-rate">Expected Interest Rate (%)</label>
+                        <input type="number" id="elig-rate" value="10.5" aria-label="Expected Interest Rate">
                     </div>
                     <div class="form-group">
-                        <label>Expected Tenure (Years)</label>
-                        <input type="number" id="elig-tenure" value="5">
+                        <label for="elig-tenure">Expected Tenure (Years)</label>
+                        <input type="number" id="elig-tenure" value="5" aria-label="Expected Tenure">
                     </div>
                     <button class="btn btn-secondary w-100 mt-2" onclick="calculateEligibility()">Check Eligibility</button>
                     <div class="calc-results mt-3" id="elig-result" style="display:none;">
@@ -299,8 +465,44 @@
             </div>
         </div>
     </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials section bg-light">
+        <div class="container">
+            <div class="section-header reveal-up">
+                <h4 class="section-subtitle">Client Stories</h4>
+                <h2 class="section-title">What Our Customers Say</h2>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card reveal-up">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>"Sanatan Capital made my business expansion possible. The MSME loan process was completely transparent and much faster than I expected."</p>
+                    <div class="client-info">
+                        <h4>Rajesh Kumar</h4>
+                        <span>Business Owner</span>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal-up" style="transition-delay: 0.1s;">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>"I was struggling to get a home loan due to document issues, but their dedicated support team guided me perfectly. Now I own my dream home!"</p>
+                    <div class="client-info">
+                        <h4>Priya Sharma</h4>
+                        <span>Self Employed</span>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal-up" style="transition-delay: 0.2s;">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p>"Very professional team. They connected me with a top partner bank and negotiated the lowest interest rate for my Loan Against Property."</p>
+                    <div class="client-info">
+                        <h4>Vikram Singh</h4>
+                        <span>Contractor</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <!-- Application Form -->
+    <!-- Advanced Lead Form Application Section -->
     <section id="apply" class="apply section bg-dark text-white">
         <div class="container apply-container">
             <div class="apply-text reveal-left">
@@ -308,38 +510,50 @@
                 <h2 class="section-title text-white">Apply For a Loan Today</h2>
                 <p>Fill out the form and our financial advisors will get in touch with you within 24 hours to discuss your best options.</p>
                 <div class="mt-4">
-                    <p><i class="fas fa-phone text-secondary"></i> +91 98765 43210</p>
-                    <p><i class="fas fa-envelope text-secondary"></i> apply@sanatancapital.com</p>
+                    <p><i class="fas fa-phone text-secondary"></i> +91 9664223901</p>
+                    <p><i class="fas fa-envelope text-secondary"></i> sanatan.capital@zohomail.in</p>
                 </div>
             </div>
             <div class="apply-form-wrapper reveal-right">
-                <form id="loan-form" class="glass-form">
+                <form id="loan-form" class="glass-form" name="lead-form">
                     <div class="form-row">
-                        <input type="text" id="name" placeholder="Full Name" required>
-                        <input type="tel" id="phone" placeholder="Mobile Number" required pattern="[0-9]{10}">
+                        <input type="text" id="name" name="name" placeholder="Full Name" required aria-label="Full Name">
+                        <input type="tel" id="phone" name="phone" placeholder="Mobile Number" required pattern="[0-9]{10}" title="10 digit mobile number" aria-label="Mobile Number">
                     </div>
                     <div class="form-row">
-                        <input type="email" id="email" placeholder="Email Address" required>
-                        <select id="loan-type" required>
+                        <input type="tel" id="whatsapp" name="whatsapp" placeholder="WhatsApp Number" pattern="[0-9]{10}" title="10 digit whatsapp number" aria-label="WhatsApp Number">
+                        <input type="text" id="city" name="city" placeholder="City" required aria-label="City">
+                    </div>
+                    <div class="form-row">
+                        <select id="loan-type" name="loan_type" required aria-label="Select Loan Type">
                             <option value="" disabled selected>Select Loan Type</option>
                             <option value="home">Home Loan</option>
                             <option value="business">Business Loan</option>
                             <option value="msme">MSME Loan</option>
                             <option value="lap">Loan Against Property</option>
-                            <option value="personal">Personal Loan</option>
                             <option value="vehicle">Vehicle Loan</option>
+                            <option value="personal">Personal Loan</option>
                         </select>
+                        <input type="number" id="req-amount" name="amount" placeholder="Required Loan Amount (₹)" required min="10000" aria-label="Required Loan Amount">
                     </div>
-                    <input type="number" id="req-amount" placeholder="Required Loan Amount (₹)" required>
-                    <textarea id="message" rows="3" placeholder="Any specific requirements?"></textarea>
-                    <button type="submit" class="btn btn-secondary w-100">Submit Application</button>
-                    <div id="form-message" class="form-message"></div>
+                    <div class="form-row">
+                        <select id="occupation" name="occupation" required aria-label="Select Occupation">
+                            <option value="" disabled selected>Select Occupation</option>
+                            <option value="salaried">Salaried</option>
+                            <option value="self-employed">Self-Employed / Business</option>
+                            <option value="professional">Professional (CA, Doctor, etc.)</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <input type="number" id="monthly-income" name="income" placeholder="Monthly Income (₹)" required min="5000" aria-label="Monthly Income">
+                    </div>
+                    <button type="submit" id="submit-btn" class="btn btn-secondary w-100">Submit Application</button>
+                    <div id="form-message" class="form-message" aria-live="polite"></div>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- Expanded FAQ Section (10 Questions) -->
     <section class="faq section bg-light">
         <div class="container reveal-up">
             <div class="section-header">
@@ -348,78 +562,141 @@
             </div>
             <div class="faq-accordion">
                 <div class="faq-item">
-                    <button class="faq-question">Are you a direct lender? <i class="fas fa-chevron-down"></i></button>
+                    <button class="faq-question" aria-expanded="false">Are you a direct lender or NBFC? <i class="fas fa-chevron-down"></i></button>
                     <div class="faq-answer">
-                        <p>No, Sanatan Capital Private Limited is a DSA (Direct Selling Agent) and loan distribution platform. We do not lend our own money. All loans are processed, sanctioned, and disbursed directly by our RBI-approved partner banks and NBFCs.</p>
+                        <p>No, Sanatan Capital Private Limited operates strictly as a DSA (Direct Selling Agent) and loan distribution platform. We do not lend our own money. All loans are sanctioned and disbursed directly by our RBI-approved partner banks and NBFCs.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">Do you charge fees from customers? <i class="fas fa-chevron-down"></i></button>
+                    <button class="faq-question" aria-expanded="false">Do you charge consultation fees from customers? <i class="fas fa-chevron-down"></i></button>
                     <div class="faq-answer">
-                        <p>Our consultation services are completely free for customers. We earn a commission from our partner banks upon successful loan disbursal.</p>
+                        <p>Our advisory and loan processing services are completely free for customers. We earn a standard commission directly from our partner banks upon successful loan disbursal.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">How long does it take to get a loan approved? <i class="fas fa-chevron-down"></i></button>
+                    <button class="faq-question" aria-expanded="false">How long does it take to get a loan approved? <i class="fas fa-chevron-down"></i></button>
                     <div class="faq-answer">
-                        <p>Approval times vary by loan type and lender. Personal loans can be approved in 24-48 hours, while Home Loans or LAP may take 7-14 working days depending on document verification and property valuation.</p>
+                        <p>Approval timelines vary. Personal/Vehicle loans can be approved in 24-48 hours. Business or MSME loans may take 3-7 days, while Home Loans or LAP may take 7-14 working days due to physical property valuation and legal checks.</p>
                     </div>
                 </div>
                 <div class="faq-item">
-                    <button class="faq-question">Can I apply if my CIBIL score is low? <i class="fas fa-chevron-down"></i></button>
+                    <button class="faq-question" aria-expanded="false">Can I apply if my CIBIL score is low? <i class="fas fa-chevron-down"></i></button>
                     <div class="faq-answer">
-                        <p>While a higher CIBIL score gets you better interest rates, we work with several NBFCs that specialize in funding clients with lower credit scores. Submit your profile, and we will find the best match for you.</p>
+                        <p>Yes. While a higher CIBIL score (750+) gets you the best interest rates, we work with specific NBFC partners who specialize in funding clients with lower credit scores or those new to credit.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">What is a Loan Against Property (LAP)? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>LAP allows you to pledge your commercial, residential, or industrial property as collateral to secure a high-value loan for business expansion, medical needs, or education, usually at lower interest rates than unsecured loans.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">Are daily wage workers or farmers eligible? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Yes, we have specialized schemes through our partner NBFCs that cater to farmers (Tractor loans, agriculture infrastructure) and daily wage workers depending on their banking habits and asset holding.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">What documents are required for an MSME Loan? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Typically, you need KYC documents, Udyam Registration Certificate, GST returns (if applicable), last 1-3 years ITR, and 6-12 months of current account bank statements.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">Can I prepay or foreclose my loan? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Yes, most of our partner banks allow part-payment or foreclosure. Some may charge a nominal foreclosure fee (usually 2-4%), while others (especially for floating rate Home Loans for individuals) charge zero foreclosure penalties as per RBI guidelines.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">Is my data and personal information secure? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Absolutely. We follow strict data privacy protocols. Your documents and details are only shared with the specific bank/NBFC where your file is being processed via secure channels.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">Do you help with PMAY (Pradhan Mantri Awas Yojana)? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Yes, our experts guide eligible first-time homebuyers through the PMAY subsidy process, ensuring they get the maximum interest subvention benefit on their Home Loan.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
+    <!-- Expanded Contact & CTA Section -->
     <section id="contact" class="contact section">
-        <div class="container contact-container">
-            <div class="contact-info reveal-left">
+        <div class="container">
+            <div class="section-header text-center reveal-up">
                 <h4 class="section-subtitle">Get In Touch</h4>
                 <h2 class="section-title">We're Here to Help</h2>
-                <div class="info-card">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div>
-                        <h4>Office Address</h4>
-                        <p>Sanatan Capital Pvt. Ltd.<br>Near Central Bank,Mahaveer Colony, Kher Road, Balotra,Rajasthan 344022 India</p>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <h4>Email Us</h4>
-                        <p>sanatan.capital@zohomail.in</p>
-                    </div>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-phone-alt"></i>
-                    <div>
-                        <h4>Call Us</h4>
-                        <p>+91 7023654630<br>+91 9664223901 (Toll Free)</p>
-                    </div>
-                </div>
             </div>
-            <div class="contact-image reveal-right">
-                <img src="assets/Customer Support.png" alt="Customer Support" onerror="this.style.display='none'">
+            
+            <div class="contact-container">
+                <div class="contact-info reveal-left">
+                    <div class="info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Office Address</h4>
+                            <p>Sanatan Capital Pvt. Ltd.<br>Near Central Bank, Mahaveer Colony,<br>Kher Road, Balotra, Rajasthan 344022 India</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email Us</h4>
+                            <p>sanatan.capital@zohomail.in</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Call or WhatsApp</h4>
+                            <p>+91 7023654630<br>+91 9664223901 (Toll Free)</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Working Hours</h4>
+                            <p>Monday - Saturday: 10:00 AM - 6:30 PM<br>Sunday: Closed</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-map reveal-right">
+                    <div class="map-wrapper">
+                        <img src="assets/customer-support.png" alt="Customer Support Location" loading="lazy">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Pre-Footer CTA Banner -->
+    <section class="cta-banner section bg-primary text-white text-center">
+        <div class="container reveal-up">
+            <h2 class="mb-4 text-white">Take the First Step Towards Your Goals</h2>
+            <p class="mb-4">Speak to our financial experts today and find the perfect loan solution with minimal hassle.</p>
+            <div class="cta-buttons">
+                <a href="#apply" class="btn btn-secondary mx-2">Apply Now</a>
+                <a href="tel:+919664223901" class="btn btn-outline-white mx-2">Talk to Expert</a>
+                <a href="#tools" class="btn btn-outline-white mx-2">Check Eligibility</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expanded Footer -->
     <footer class="footer">
         <div class="container footer-grid">
             <div class="footer-about">
                 <img src="assets/logo-horizontal.png" alt="Sanatan Capital" class="footer-logo" onerror="this.src='assets/logo.png';">
                 <p>Sanatan Capital Private Limited is a premier loan distribution company facilitating quick, transparent, and customized loan solutions through an extensive network of banks and NBFCs.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 </div>
             </div>
             <div class="footer-links">
@@ -433,22 +710,23 @@
                 </ul>
             </div>
             <div class="footer-links">
-                <h4>Loan Products</h4>
+                <h4>Loan Categories</h4>
                 <ul>
-                    <li><a href="#">Home Loan</a></li>
-                    <li><a href="#">Business Loan</a></li>
-                    <li><a href="#">MSME Loan</a></li>
-                    <li><a href="#">Loan Against Property</a></li>
-                    <li><a href="#">Personal Loan</a></li>
+                    <li><a href="#products">Home Loan</a></li>
+                    <li><a href="#products">Business & MSME</a></li>
+                    <li><a href="#products">Property Solutions</a></li>
+                    <li><a href="#products">Vehicle Loan</a></li>
+                    <li><a href="#products">Personal Loan</a></li>
                 </ul>
             </div>
-            <div class="footer-newsletter">
-                <h4>Stay Updated</h4>
-                <p>Subscribe to our newsletter for financial tips and latest interest rates.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email Address" required>
-                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                </form>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Disclaimer</a></li>
+                    <li><a href="#">DSA Partners List</a></li>
+                </ul>
             </div>
         </div>
         <div class="footer-bottom container">
