@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         calculateEMI();
     }
 
-            // --- 10. INTERCEPT TALLY FORM SUBMISSION (SMART REDIRECT) ---
+                // --- 10. INTERCEPT TALLY FORM SUBMISSION (SMART REDIRECT & HIDE TALLY THANK YOU) ---
     window.addEventListener('message', (e) => {
         try {
             // Tally form submit hone par message bhejta hai
@@ -196,30 +196,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 const formId = eventData.formId || (eventData.payload && eventData.payload.formId);
                 
                 let waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर एक फॉर्म सबमिट किया है। कृपया मुझसे संपर्क करें।";
-                let alertText = "✅ Sanatan Capital: आपका फॉर्म सफलतापूर्वक जमा हो गया है। हमारी टीम 24 घंटे के अंदर आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
+                let successTitle = "आवेदन सफल (Application Successful)";
                 
-                // अगर 'लोन फॉर्म' (ID: ODe5Mk) भरा गया है
+                // अलग-अलग फॉर्म के लिए अलग-अलग मैसेज
                 if (formId === 'ODe5Mk') {
                     waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर 'लोन (Loan)' के लिए फॉर्म सबमिट किया है। कृपया इस पर मुझसे संपर्क करें।";
-                    alertText = "✅ Sanatan Capital: आपका 'लोन आवेदन' सफलतापूर्वक जमा हो गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
-                } 
-                // अगर 'प्रॉपर्टी फॉर्म' (ID: Y5KrMz) भरा गया है
-                else if (formId === 'Y5KrMz') {
+                    successTitle = "लोन आवेदन सफल! (Loan Applied)";
+                } else if (formId === 'Y5KrMz') {
                     waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर 'प्रॉपर्टी (Property)' के लिए फॉर्म सबमिट किया है। कृपया इस पर मुझसे संपर्क करें।";
-                    alertText = "✅ Sanatan Capital: आपका 'प्रॉपर्टी आवेदन' सफलतापूर्वक जमा हो गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
+                    successTitle = "प्रॉपर्टी आवेदन सफल! (Property Enquiry)";
                 }
-                
-                // ग्राहक को स्क्रीन पर मैसेज दिखाना
-                alert(alertText);
-                
-                // सीधा WhatsApp पर भेजना (नंबर: 9664223901)
-                const waMessage = encodeURIComponent(waText);
-                window.location.href = `https://wa.me/919664223901?text=${waMessage}`;
+
+                // 1. सबसे पहले: Tally के फॉर्म को हटाकर Sanatan Capital का कस्टम 'Thank You' मैसेज लगा दें
+                const iframes = document.querySelectorAll('iframe[src*="tally.so"]');
+                iframes.forEach(iframe => {
+                    const parentContainer = iframe.parentElement;
+                    if (parentContainer) {
+                        parentContainer.innerHTML = `
+                            <div style="padding: 4rem 1rem; text-align: center; background: #ffffff; border-radius: 1rem;">
+                                <i class="fas fa-check-circle" style="font-size: 4.5rem; color: #25D366; margin-bottom: 1.5rem;"></i>
+                                <h2 style="font-size: 2rem; color: #0F172A; margin-bottom: 1rem;">${successTitle}</h2>
+                                <p style="font-size: 1.2rem; color: #334155; font-weight: 500;">Sanatan Capital में आपका फॉर्म सफलतापूर्वक जमा हो गया है।</p>
+                                <p style="color: #666; margin-top: 0.5rem; margin-bottom: 2rem; font-size: 1rem;">हमारी टीम 24 घंटे के अंदर आपसे संपर्क करेगी।</p>
+                                <button onclick="window.location.reload()" class="btn btn-primary" style="font-size: 1.1rem; padding: 0.8rem 2rem;">नया फॉर्म भरें / होम पेज</button>
+                            </div>
+                        `;
+                    }
+                });
+
+                // 2. कस्टमर को अलर्ट दिखाकर WhatsApp पर भेजें (थोड़ा डिले देकर ताकि पीछे का नया डिज़ाइन लोड हो सके)
+                setTimeout(() => {
+                    alert(`✅ Sanatan Capital: आपका फॉर्म सफलतापूर्वक जमा हो गया है!\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...`);
+                    const waMessage = encodeURIComponent(waText);
+                    window.location.href = `https://wa.me/919664223901?text=${waMessage}`;
+                }, 400); 
             }
         } catch (error) {
             // Agar message Tally ka nahi hai, to ignore karein
         }
     });
+
 
 });
 
