@@ -184,27 +184,42 @@ document.addEventListener('DOMContentLoaded', () => {
         calculateEMI();
     }
 
-        // --- 10. INTERCEPT TALLY FORM SUBMISSION (NEW JUGAAAD) ---
+            // --- 10. INTERCEPT TALLY FORM SUBMISSION (SMART REDIRECT) ---
     window.addEventListener('message', (e) => {
         try {
-            // Tally form submit hone par ek hidden message bhejta hai
+            // Tally form submit hone par message bhejta hai
             const eventData = JSON.parse(e.data);
             
             if (eventData.event === 'Tally.FormSubmitted') {
-                // Form submit hote hi Sanatan Capital ka popup message
-                alert("✅ Sanatan Capital: आपका फॉर्म सफलतापूर्वक जमा हो गया है। हमारी टीम 24 घंटे के अंदर आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...");
                 
-                // Seedha WhatsApp par bhejne ka code (Message)
-                const waMessage = encodeURIComponent("Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर लोन/प्रॉपर्टी के लिए फॉर्म सबमिट किया है। कृपया मुझसे संपर्क करें।");
+                // Form ID का पता लगाना
+                const formId = eventData.formId || (eventData.payload && eventData.payload.formId);
                 
-                // CHANGED: Number updated to 9664223901
+                let waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर एक फॉर्म सबमिट किया है। कृपया मुझसे संपर्क करें।";
+                let alertText = "✅ Sanatan Capital: आपका फॉर्म सफलतापूर्वक जमा हो गया है। हमारी टीम 24 घंटे के अंदर आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
+                
+                // अगर 'लोन फॉर्म' (ID: ODe5Mk) भरा गया है
+                if (formId === 'ODe5Mk') {
+                    waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर 'लोन (Loan)' के लिए फॉर्म सबमिट किया है। कृपया इस पर मुझसे संपर्क करें।";
+                    alertText = "✅ Sanatan Capital: आपका 'लोन आवेदन' सफलतापूर्वक जमा हो गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
+                } 
+                // अगर 'प्रॉपर्टी फॉर्म' (ID: Y5KrMz) भरा गया है
+                else if (formId === 'Y5KrMz') {
+                    waText = "Hello Sanatan Capital, मैंने अभी आपकी वेबसाइट पर 'प्रॉपर्टी (Property)' के लिए फॉर्म सबमिट किया है। कृपया इस पर मुझसे संपर्क करें।";
+                    alertText = "✅ Sanatan Capital: आपका 'प्रॉपर्टी आवेदन' सफलतापूर्वक जमा हो गया है। हमारी टीम जल्द ही आपसे संपर्क करेगी।\n\nअब आपको सीधा WhatsApp पर भेजा जा रहा है...";
+                }
+                
+                // ग्राहक को स्क्रीन पर मैसेज दिखाना
+                alert(alertText);
+                
+                // सीधा WhatsApp पर भेजना (नंबर: 9664223901)
+                const waMessage = encodeURIComponent(waText);
                 window.location.href = `https://wa.me/919664223901?text=${waMessage}`;
             }
         } catch (error) {
             // Agar message Tally ka nahi hai, to ignore karein
         }
     });
-
 
 });
 
