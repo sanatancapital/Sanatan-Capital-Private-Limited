@@ -22,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
 // Registration Demo Logic
 document.getElementById('registerForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert("🎉 Account Created Successfully!\n\nअब आपको डैशबोर्ड पर भेजा जा रहा है। वहाँ आपको अपनी KYC (PAN, Aadhaar) सबमिट करनी होगी ताकि आपकी ID एक्टिवेट हो सके।");
+    alert("🎉 Account Created Successfully!\n\nSanatan Capital की तरफ से आपकी Email ID पर एक कन्फर्मेशन मेल भेज दिया गया है।\n\nअब आपको डैशबोर्ड पर भेजा जा रहा है। कृपया वहां अपनी KYC पूरी करें।");
     
     // Auto switch to login after registration demo
     document.getElementById('registerForm').reset();
