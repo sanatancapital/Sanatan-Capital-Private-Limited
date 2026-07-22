@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Portal - Sanatan Capital</title>
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="portal-container">
+        <!-- Left Side: Branding & Info -->
+        <div class="branding-section">
+            <div class="brand-content">
+                <h1 class="logo-text"><i class="fas fa-chart-line"></i> Sanatan Capital</h1>
+                <p class="tagline">-- आपका विश्वास, हमारा संकल्प --</p>
+                <h2 class="main-heading">Join Our Premium<br><span class="highlight">DSA Network</span></h2>
+                <ul class="benefits-list">
+                    <li><i class="fas fa-check-circle"></i> Zero Investment / ज़ीरो इन्वेस्टमेंट</li>
+                    <li><i class="fas fa-check-circle"></i> High Payouts / शानदार कमीशन</li>
+                    <li><i class="fas fa-check-circle"></i> 100% Transparency / पूरी पारदर्शिता</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time Tracking / लाइव ट्रैकिंग</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Right Side: Forms -->
+        <div class="form-section">
+            
+            <!-- 1. LOGIN FORM -->
+            <div id="login-box" class="form-box active">
+                <h3>Partner Login <br><span class="hindi-text">पार्टनर लॉग-इन</span></h3>
+                <p class="sub-text">Welcome back! Please enter your details.</p>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label>Mobile Number / मोबाइल नंबर</label>
+                        <input type="tel" placeholder="Enter 10 digit number" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password / पासवर्ड</label>
+                        <input type="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Login / लॉग-इन करें</button>
+                </form>
+                <p class="switch-form">Don't have an account? <a href="#" onclick="switchForm('register')">Join as DSA</a></p>
+            </div>
+
+            <!-- 2. REGISTRATION FORM (Hidden by default) -->
+            <div id="register-box" class="form-box">
+                <h3>DSA Registration <br><span class="hindi-text">नया DSA पंजीकरण</span></h3>
+                <p class="sub-text">Fill the form to partner with Sanatan Capital.</p>
+                
+                <form id="registerForm">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Full Name / पूरा नाम</label>
+                            <input type="text" placeholder="As per PAN Card" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Mobile Number / मोबाइल नं.</label>
+                            <input type="tel" placeholder="10 Digit Number" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>PAN Card Number</label>
+                            <input type="text" placeholder="ABCDE1234F" style="text-transform: uppercase;" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Aadhaar Number</label>
+                            <input type="number" placeholder="12 Digit Aadhaar" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Upload PAN Card <i class="fas fa-paperclip"></i></label>
+                        <input type="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Application / आवेदन जमा करें</button>
+                </form>
+                <p class="switch-form">Already a partner? <a href="#" onclick="switchForm('login')">Login here</a></p>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
