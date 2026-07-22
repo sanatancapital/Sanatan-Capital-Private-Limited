@@ -1,31 +1,41 @@
-// Function to switch between Login and Register Forms
+// Function to switch between Login, Register, and OTP Forms
 function switchForm(formName) {
-    const loginBox = document.getElementById('login-box');
-    const registerBox = document.getElementById('register-box');
+    // Hide all forms first
+    document.getElementById('login-box').classList.remove('active');
+    document.getElementById('register-box').classList.remove('active');
+    document.getElementById('otp-box').classList.remove('active');
 
+    // Show the requested form
     if (formName === 'register') {
-        loginBox.classList.remove('active');
-        registerBox.classList.add('active');
-    } else {
-        registerBox.classList.remove('active');
-        loginBox.classList.add('active');
+        document.getElementById('register-box').classList.add('active');
+    } else if (formName === 'login') {
+        document.getElementById('login-box').classList.add('active');
+    } else if (formName === 'otp') {
+        document.getElementById('otp-box').classList.add('active');
     }
 }
 
-// Login Demo Logic
+// 1. Login Logic
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    // Redirecting to Dashboard
+    // Login successful, redirect to dashboard
     window.location.href = "dashboard.html"; 
 });
 
-
-// Registration Demo Logic
+// 2. Registration Step 1: Submit Details & Send OTP
 document.getElementById('registerForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    alert("🎉 Account Created Successfully!\n\nSanatan Capital की तरफ से आपकी Email ID पर एक कन्फर्मेशन मेल भेज दिया गया है।\n\nअब आपको डैशबोर्ड पर भेजा जा रहा है। कृपया वहां अपनी KYC पूरी करें।");
+    // Simulate sending OTP and switch to OTP form
+    alert("✅ OTP sent successfully to your Mobile and Email!");
+    switchForm('otp');
+});
+
+// 3. Registration Step 2: Verify OTP & Redirect
+document.getElementById('otpForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // OTP verified
+    alert("🎉 OTP Verified! Account Created Successfully.\n\nSanatan Capital की तरफ से आपकी Email ID पर एक वेलकम मेल भेज दिया गया है।\n\nअब आपको डैशबोर्ड पर भेजा जा रहा है।");
     
-    // Auto switch to login after registration demo
-    document.getElementById('registerForm').reset();
-    switchForm('login');
+    // Redirect to Dashboard
+    window.location.href = "dashboard.html";
 });
