@@ -11,95 +11,51 @@
 </head>
 <body>
 
-    <div class="portal-container">
+    <!-- Main White Container -->
+    <div class="premium-wrapper">
         
-        <!-- Left Side: Clean Branding & Info -->
-        <div class="branding-section">
-            
-            <!-- Company Logo (Directly placed, no white box needed now) -->
-            <div class="logo-wrapper">
-                <img src="../assets/logo-horizontal.png" alt="Sanatan Capital Logo" class="brand-logo" onerror="this.onerror=null; this.src='https://sanatancapital.github.io/Sanatan-Capital-Private-Limited/assets/logo-horizontal.png';">
-            </div>
-
-            <!-- Incentive Badge -->
+        <!-- Header: Logo & Badge -->
+        <header class="top-header">
+            <img src="../assets/logo-horizontal.png" alt="Sanatan Capital Logo" class="brand-logo" onerror="this.onerror=null; this.src='https://sanatancapital.github.io/Sanatan-Capital-Private-Limited/assets/logo-horizontal.png';">
             <div class="premium-badge">
-                <i class="fas fa-crown"></i> Premium DSA Partner Program 🚀
+                <i class="fas fa-crown"></i> Premium DSA Partner Program
             </div>
+            <h1 class="main-heading">Partner With Us & Grow Your Income</h1>
+            <p class="tagline">Join Sanatan Capital. Simple registration, zero investment, and fastest approvals.</p>
+        </header>
 
-            <h2 class="main-heading">Partner With Us &<br><span class="highlight">Grow Your Income</span></h2>
-            <p class="tagline">Become a Sanatan Capital DSA. Simple registration, fast approvals, and zero investment.</p>
+        <!-- Center Focused Form Area -->
+        <div class="form-container">
             
-            <!-- Attractive Loan Products List (Light Theme) -->
-            <ul class="benefits-list">
-                <li>
-                    <div class="icon-box"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="text-box">
-                        <strong>Highest Payouts</strong>
-                        <span>Up to 1% & Above (As per Slab)</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="icon-box"><i class="fas fa-building"></i></div>
-                    <div class="text-box">
-                        <strong>Business & Personal</strong>
-                        <span>Unsecured & Secured Loans</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="icon-box"><i class="fas fa-home"></i></div>
-                    <div class="text-box">
-                        <strong>Property & Home</strong>
-                        <span>Home Loan & Loan Against Property</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="icon-box"><i class="fas fa-tractor"></i></div>
-                    <div class="text-box">
-                        <strong>Vehicle & Tractor</strong>
-                        <span>Two/Four Wheeler & Commercial</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Right Side: Forms (Focused Area) -->
-        <div class="form-section">
-            
-            <!-- 1. REGISTRATION FORM (Now Default & Centered) -->
+            <!-- 1. REGISTRATION FORM (Default) -->
             <div id="register-box" class="form-box active">
-                <h3>DSA Registration <br><span class="hindi-text">नया DSA पंजीकरण</span></h3>
-                <p class="sub-text">Create your account in 30 seconds. (KYC will be done inside the dashboard).</p>
+                <h3>Create Account <span class="hindi-text">पार्टनर बनें</span></h3>
+                <p class="sub-text">Basic details only. (KYC will be done inside the dashboard).</p>
                 
                 <form id="registerForm">
                     <div class="input-group">
                         <label>Full Name / पूरा नाम (As per PAN)</label>
                         <input type="text" placeholder="Enter your full name" required>
                     </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>Mobile Number / मोबाइल नं.</label>
-                            <input type="tel" placeholder="10 Digit Number" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Email ID (Optional)</label>
-                            <input type="email" placeholder="example@gmail.com">
-                        </div>
+                    <div class="input-group">
+                        <label>Mobile Number / मोबाइल नं.</label>
+                        <input type="tel" placeholder="10 Digit Number" required>
                     </div>
                     <div class="input-group">
-                        <label>Create Password / पासवर्ड बनाएं</label>
+                        <label>Create Password / अपना पासवर्ड बनाएं</label>
                         <input type="password" placeholder="Set a strong password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Create Account <i class="fas fa-user-plus"></i></button>
+                    <button type="submit" class="btn btn-primary">Register Now <i class="fas fa-arrow-right"></i></button>
                 </form>
                 <div class="form-footer">
                     <p class="switch-form">Already a partner? <a href="#" onclick="switchForm('login')">Login here</a></p>
                 </div>
             </div>
 
-            <!-- 2. LOGIN FORM (Hidden by default) -->
+            <!-- 2. LOGIN FORM (Hidden) -->
             <div id="login-box" class="form-box">
-                <h3>Partner Login <br><span class="hindi-text">पार्टनर लॉग-इन</span></h3>
-                <p class="sub-text">Welcome back! Please enter your details to access dashboard.</p>
+                <h3>Partner Login <span class="hindi-text">लॉग-इन करें</span></h3>
+                <p class="sub-text">Enter your details to access your DSA dashboard.</p>
                 
                 <form id="loginForm">
                     <div class="input-group">
@@ -121,6 +77,46 @@
             </div>
 
         </div>
+
+        <!-- Attractive Loan Products Grid -->
+        <div class="products-section">
+            <h3 class="section-title">What you can sell / आप क्या-क्या कर सकते हैं:</h3>
+            <div class="products-grid">
+                <!-- Card 1 -->
+                <div class="product-card">
+                    <div class="icon-box gold"><i class="fas fa-money-bill-wave"></i></div>
+                    <div class="card-text">
+                        <strong>Highest Payouts</strong>
+                        <span>Up to 1% & Above (As per Slab)</span>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="product-card">
+                    <div class="icon-box blue"><i class="fas fa-building"></i></div>
+                    <div class="card-text">
+                        <strong>Business & Personal</strong>
+                        <span>Fast Unsecured & Secured Loans</span>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="product-card">
+                    <div class="icon-box green"><i class="fas fa-home"></i></div>
+                    <div class="card-text">
+                        <strong>Property & Home</strong>
+                        <span>Home Loan & Loan Against Property</span>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="product-card">
+                    <div class="icon-box purple"><i class="fas fa-tractor"></i></div>
+                    <div class="card-text">
+                        <strong>Vehicle & Tractor</strong>
+                        <span>Commercial, Two & Four Wheeler</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script src="app.js"></script>
