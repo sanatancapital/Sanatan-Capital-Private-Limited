@@ -1,10 +1,12 @@
 :root {
-    --primary: #0F172A; /* Navy Blue */
-    --secondary: #F59E0B; /* Sanatan Gold */
-    --bg-color: #F8FAFC;
-    --text-dark: #1E293B;
-    --text-light: #64748B;
-    --white: #FFFFFF;
+    --primary-dark: #0f172a;
+    --primary-light: #1e293b;
+    --accent-gold: #F59E0B;
+    --accent-hover: #d97706;
+    --text-main: #334155;
+    --text-muted: #64748b;
+    --bg-light: #f8fafc;
+    --white: #ffffff;
 }
 
 * {
@@ -15,184 +17,186 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    padding: 20px;
 }
 
 .portal-container {
     display: flex;
-    width: 90%;
+    width: 100%;
     max-width: 1100px;
+    min-height: 650px;
     background: var(--white);
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     overflow: hidden;
 }
 
-/* Left Side Branding */
+/* Left Side: Premium Branding */
 .branding-section {
-    flex: 1;
-    background: linear-gradient(135deg, var(--primary) 0%, #1e293b 100%);
+    flex: 1.2;
+    background: linear-gradient(145deg, var(--primary-dark) 0%, var(--primary-light) 100%);
     color: var(--white);
-    padding: 3rem;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.branding-section::before, .branding-section::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.1);
+}
+.branding-section::before { width: 300px; height: 300px; top: -100px; left: -100px; }
+.branding-section::after { width: 200px; height: 200px; bottom: -50px; right: -50px; }
+
+/* Logo Responsive Design */
+.logo-container {
+    margin-bottom: 2.5rem;
+    z-index: 1;
+}
+.brand-logo {
+    max-width: 220px; /* डेस्कटॉप के लिए साइज */
+    height: auto;
+    display: block;
+    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+}
+
+.premium-badge {
+    display: inline-block;
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--accent-gold);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    z-index: 1;
+    width: fit-content;
+}
+
+.main-heading {
+    font-size: 2.5rem;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+    font-weight: 800;
+    z-index: 1;
+}
+
+.highlight { color: var(--accent-gold); }
+
+.tagline {
+    font-size: 1rem;
+    color: #cbd5e1;
+    margin-bottom: 2.5rem;
+    z-index: 1;
+}
+
+.benefits-list {
+    list-style: none;
+    z-index: 1;
+}
+
+.benefits-list li {
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #f8fafc;
+    line-height: 1.4;
+}
+
+.benefits-list li strong { color: var(--accent-gold); }
+
+.benefits-list i {
+    color: var(--accent-gold);
+    font-size: 1.3rem;
+    min-width: 25px;
+}
+
+/* Right Side: Form Area */
+.form-section {
+    flex: 1;
+    padding: 4rem;
+    background: var(--white);
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.logo-text {
-    font-size: 1.8rem;
-    color: var(--secondary);
-    margin-bottom: 0.5rem;
-}
+.form-box { display: none; animation: slideUp 0.5s ease; }
+.form-box.active { display: block; }
 
-.tagline {
-    font-size: 0.9rem;
-    color: #cbd5e1;
-    margin-bottom: 3rem;
-}
-
-.main-heading {
-    font-size: 2.5rem;
-    line-height: 1.2;
-    margin-bottom: 2rem;
-}
-
-.highlight {
-    color: var(--secondary);
-}
-
-.benefits-list {
-    list-style: none;
-}
-
-.benefits-list li {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.benefits-list i {
-    color: var(--secondary);
-}
-
-/* Right Side Form */
-.form-section {
-    flex: 1;
-    padding: 3rem;
-    position: relative;
-}
-
-.form-box {
-    display: none;
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-.form-box.active {
-    display: block;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 h3 {
-    font-size: 1.8rem;
-    color: var(--text-dark);
-    margin-bottom: 0.2rem;
-}
-
-.hindi-text {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    font-weight: 500;
-}
-
-.sub-text {
-    color: var(--text-light);
-    margin-bottom: 2rem;
-    margin-top: 0.5rem;
-}
-
-.input-group {
-    margin-bottom: 1.5rem;
-}
-
-.input-group label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-dark);
+    font-size: 2rem;
+    color: var(--primary-dark);
     margin-bottom: 0.5rem;
+    font-weight: 800;
 }
 
+.hindi-text { font-size: 1.2rem; color: var(--text-muted); font-weight: 500; }
+.sub-text { color: var(--text-muted); margin-bottom: 2.5rem; font-size: 0.95rem; }
+
+.input-group { margin-bottom: 1.5rem; }
+.input-group label {
+    display: block; font-size: 0.9rem; font-weight: 600;
+    color: var(--primary-dark); margin-bottom: 0.6rem;
+}
 .input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 1rem;
-    outline: none;
-    transition: 0.3s;
+    width: 100%; padding: 14px 16px; border: 2px solid #e2e8f0;
+    border-radius: 12px; font-size: 1rem; color: var(--text-main);
+    background: var(--bg-light); outline: none; transition: all 0.3s ease;
 }
-
 .input-group input:focus {
-    border-color: var(--secondary);
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    border-color: var(--accent-gold); background: var(--white);
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
 }
 
-.form-row {
-    display: flex;
-    gap: 15px;
-}
-.form-row .input-group {
-    flex: 1;
-}
+.form-row { display: flex; gap: 15px; }
+.form-row .input-group { flex: 1; }
 
 .btn-primary {
-    width: 100%;
-    padding: 14px;
-    background: var(--secondary);
-    color: var(--white);
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-    margin-top: 1rem;
+    width: 100%; padding: 16px; background: var(--accent-gold);
+    color: var(--white); border: none; border-radius: 12px;
+    font-size: 1.1rem; font-weight: 700; cursor: pointer;
+    transition: all 0.3s ease; display: flex; justify-content: center;
+    align-items: center; gap: 10px;
 }
-
 .btn-primary:hover {
-    background: #d97706;
+    background: var(--accent-hover); transform: translateY(-2px);
+    box-shadow: 0 10px 20px -10px var(--accent-gold);
 }
 
-.switch-form {
-    text-align: center;
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
-    color: var(--text-dark);
-}
-
-.switch-form a {
-    color: var(--secondary);
-    text-decoration: none;
-    font-weight: 600;
-}
+.switch-form { text-align: center; margin-top: 2rem; font-size: 0.95rem; color: var(--text-muted); }
+.switch-form a { color: var(--accent-gold); text-decoration: none; font-weight: 700; margin-left: 5px; }
+.switch-form a:hover { text-decoration: underline; }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
-    .portal-container {
-        flex-direction: column;
-    }
-    .form-row {
-        flex-direction: column;
-        gap: 0;
-    }
+@media (max-width: 900px) {
+    .portal-container { flex-direction: column; min-height: auto; }
+    .branding-section { padding: 3rem 2rem; text-align: center; }
+    
+    /* Center everything on mobile */
+    .brand-logo { max-width: 180px; margin: 0 auto; }
+    .logo-container { margin-bottom: 2rem; }
+    .premium-badge { margin: 0 auto 1.5rem auto; }
+    .main-heading { font-size: 2.1rem; }
+    .benefits-list li { text-align: left; } /* Keep list left-aligned for readability */
+    
+    .form-section { padding: 3rem 2rem; }
+    .form-row { flex-direction: column; gap: 0; }
 }
