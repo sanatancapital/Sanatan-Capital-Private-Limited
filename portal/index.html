@@ -106,161 +106,223 @@
         </div>
     </div>
 
+   <!-- 1. Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- 2. Master Backend Logic Script -->
     <script>
         const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentAction = ""; // Tracks if user is registering, logging in, or resetting pwd
-        let loginMode = "password"; // Default login mode
+        let currentAction = ""; 
+        let loginMode = "password"; 
 
-        // Smart Logic to detect if input is Email or Indian Mobile Number
+        // चेक करने के लिए कि इनपुट मोबाइल नंबर है या ईमेल
         function isMobile(input) { return /^\d{10}$/.test(input); }
 
         window.switchForm = function(formName) {
             document.querySelectorAll('.form-box').forEach(box => box.classList.remove('active'));
             document.getElementById(formName + '-box').classList.add('active');
-            document.getElementById('newPwdGroup').style.display = 'none'; // Reset hidden fields
+            
+            const newPwdGroup = document.getElementById('newPwdGroup');
+            if(newPwdGroup) newPwdGroup.style.display = 'none';
         }
 
         window.toggleLoginMethod = function() {
             const pwdGroup = document.getElementById('passwordGroup');
             const toggleBtn = document.getElementById('loginToggleBtn');
             const loginBtn = document.getElementById('loginBtn');
+            const loginIdInput = document.getElementById('loginId');
             
             if (loginMode === "password") {
                 loginMode = "otp";
                 pwdGroup.style.display = "none";
                 document.getElementById('loginPwd').required = false;
                 toggleBtn.innerText = "Login via Password instead";
-                loginBtn.innerHTML = 'Send Login OTP <i class="fas fa-paper-plane"></i>';
+                loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+                loginIdInput.placeholder = "Enter registered Email ID"; // OTP ke liye sirf Email
             } else {
                 loginMode = "password";
                 pwdGroup.style.display = "block";
                 document.getElementById('loginPwd').required = true;
                 toggleBtn.innerText = "Login via OTP instead";
                 loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                loginIdInput.placeholder = "Enter registered Email or Mobile";
             }
         }
 
         // 1. REGISTER
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('regId').value;
-            const pwd = document.getElementById('regPwd').value;
-            document.getElementById('regBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
-            
-            let authData = isMobile(id) ? { phone: '+91'+id, password: pwd } : { email: id, password: pwd };
-            const { error } = await supabase.auth.signUp(authData);
+        const registerForm = document.getElementById('registerForm');
+        if(registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('regId').value;
+                const pwd = document.getElementById('regPwd').value;
+                const name = document.getElementById('regName').value;
 
-            document.getElementById('regBtn').innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
-            if (error) alert("❌ Error: " + error.message);
-            else {
-                alert("✅ OTP Sent to " + id);
-                sessionStorage.setItem('temp_id', id);
-                currentAction = "register";
-                switchForm('otp');
-            }
-        });
+                if (isMobile(id)) {
+                    alert("⚠️ Registration Error: कृपया मोबाइल नंबर की जगह अपनी Email ID डालें। OTP वेरिफिकेशन ईमेल पर किया जाएगा।");
+                    return;
+                }
 
-        // 2. LOGIN (Password OR OTP)
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('loginId').value;
-            const pwd = document.getElementById('loginPwd').value;
-            document.getElementById('loginBtn').innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
-
-            if (loginMode === "password") {
-                let authData = isMobile(id) ? { phone: '+91'+id, password: pwd } : { email: id, password: pwd };
-                const { error } = await supabase.auth.signInWithPassword(authData);
-                document.getElementById('loginBtn').innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                document.getElementById('regBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+                document.getElementById('regBtn').disabled = true;
                 
-                if (error) alert("❌ Login Failed: " + error.message);
-                else window.location.href = "dashboard.html";
-            } else {
-                // OTP Login
-                let authData = isMobile(id) ? { phone: '+91'+id } : { email: id };
-                const { error } = await supabase.auth.signInWithOtp(authData);
-                document.getElementById('loginBtn').innerHTML = 'Send Login OTP <i class="fas fa-paper-plane"></i>';
-                
+                const { error } = await supabaseClient.auth.signUp({ 
+                    email: id, 
+                    password: pwd,
+                    options: { data: { full_name: name } }
+                });
+
+                document.getElementById('regBtn').innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+                document.getElementById('regBtn').disabled = false;
+
                 if (error) alert("❌ Error: " + error.message);
                 else {
-                    alert("✅ Login OTP Sent to " + id);
+                    alert("✅ Registration OTP Sent to " + id);
                     sessionStorage.setItem('temp_id', id);
-                    currentAction = "login";
+                    currentAction = "register";
                     switchForm('otp');
                 }
-            }
-        });
+            });
+        }
+
+        // 2. LOGIN
+        const loginForm = document.getElementById('loginForm');
+        if(loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('loginId').value;
+                const pwd = document.getElementById('loginPwd').value;
+                const loginBtn = document.getElementById('loginBtn');
+                
+                loginBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+                loginBtn.disabled = true;
+
+                if (loginMode === "password") {
+                    // Password Login (Can be Email)
+                    // Note: Since we are using free tier, users are registered via Email. 
+                    // So login id should be email. If you want mobile login with pwd, we need separate database logic.
+                    if(isMobile(id)){
+                         alert("⚠️ कृपया लॉगिन करने के लिए अपनी Email ID का उपयोग करें।");
+                         loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                         loginBtn.disabled = false;
+                         return;
+                    }
+
+                    const { error } = await supabaseClient.auth.signInWithPassword({ email: id, password: pwd });
+                    
+                    loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                    loginBtn.disabled = false;
+                    
+                    if (error) alert("❌ Login Failed: " + error.message);
+                    else window.location.href = "dashboard.html";
+                } else {
+                    // OTP Login
+                    if (isMobile(id)) {
+                        alert("⚠️ OTP सुविधा अभी सिर्फ Email ID के लिए उपलब्ध है। कृपया अपनी Email ID डालें।");
+                        loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+                        loginBtn.disabled = false;
+                        return;
+                    }
+
+                    const { error } = await supabaseClient.auth.signInWithOtp({ email: id });
+                    
+                    loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+                    loginBtn.disabled = false;
+                    
+                    if (error) alert("❌ Error: " + error.message);
+                    else {
+                        alert("✅ Login OTP Sent to " + id);
+                        sessionStorage.setItem('temp_id', id);
+                        currentAction = "login";
+                        switchForm('otp');
+                    }
+                }
+            });
+        }
 
         // 3. FORGOT PASSWORD
-        document.getElementById('forgotForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('forgotId').value;
-            document.getElementById('forgotBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
-
-            // Supabase handles password resets via email mostly. For phone, it's an OTP flow.
-            let error;
-            if (isMobile(id)) {
-                const res = await supabase.auth.signInWithOtp({ phone: '+91'+id });
-                error = res.error;
-            } else {
-                const res = await supabase.auth.resetPasswordForEmail(id);
-                error = res.error;
-            }
-
-            document.getElementById('forgotBtn').innerHTML = 'Send Reset OTP <i class="fas fa-key"></i>';
-            if (error) alert("❌ Error: " + error.message);
-            else {
-                alert("✅ Password Reset OTP Sent to " + id);
-                sessionStorage.setItem('temp_id', id);
-                currentAction = "forgot";
-                switchForm('otp');
-                document.getElementById('newPwdGroup').style.display = 'block'; // Show new password field
-                document.getElementById('newPwd').required = true;
-            }
-        });
-
-        // 4. VERIFY OTP (Handles all 3 scenarios)
-        document.getElementById('otpForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const otp = document.getElementById('otpInput').value;
-            const savedId = sessionStorage.getItem('temp_id');
-            document.getElementById('otpBtn').innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
-
-            let verifyType = isMobile(savedId) ? 'phone' : (currentAction === "forgot" && !isMobile(savedId) ? 'recovery' : 'email');
-            let verifyPhone = isMobile(savedId) ? '+91'+savedId : savedId;
-
-            const { data, error } = await supabase.auth.verifyOtp({
-                email: !isMobile(savedId) ? savedId : undefined,
-                phone: isMobile(savedId) ? verifyPhone : undefined,
-                token: otp,
-                type: verifyType
-            });
-
-            if (error) {
-                alert("❌ Invalid OTP! गलत OTP, कृपया दोबारा चेक करें।");
-                document.getElementById('otpBtn').innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
-                return;
-            }
-
-            // If it was a password reset, update the password now
-            if (currentAction === "forgot") {
-                const newPwd = document.getElementById('newPwd').value;
-                const { error: updateError } = await supabase.auth.updateUser({ password: newPwd });
-                if (updateError) {
-                    alert("❌ Failed to update password: " + updateError.message);
-                } else {
-                    alert("🎉 Password Changed Successfully! Please Login.");
-                    switchForm('login');
+        const forgotForm = document.getElementById('forgotForm');
+        if(forgotForm) {
+            forgotForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const id = document.getElementById('forgotId').value;
+                
+                if (isMobile(id)) {
+                    alert("⚠️ पासवर्ड रीसेट लिंक/OTP आपकी Email ID पर भेजा जाता है। कृपया अपनी रजिस्टर्ड Email ID डालें।");
+                    return;
                 }
-            } else {
-                alert("🎉 Success! Welcome to Sanatan Capital.");
-                window.location.href = "dashboard.html";
-            }
-            document.getElementById('otpBtn').innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
-        });
+
+                document.getElementById('forgotBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+                document.getElementById('forgotBtn').disabled = true;
+
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(id);
+
+                document.getElementById('forgotBtn').innerHTML = 'Send Reset OTP <i class="fas fa-key"></i>';
+                document.getElementById('forgotBtn').disabled = false;
+
+                if (error) alert("❌ Error: " + error.message);
+                else {
+                    alert("✅ Password Reset OTP Sent to " + id);
+                    sessionStorage.setItem('temp_id', id);
+                    currentAction = "forgot";
+                    switchForm('otp');
+                    
+                    const newPwdGroup = document.getElementById('newPwdGroup');
+                    if(newPwdGroup) newPwdGroup.style.display = 'block';
+                    document.getElementById('newPwd').required = true;
+                }
+            });
+        }
+
+        // 4. VERIFY OTP
+        const otpForm = document.getElementById('otpForm');
+        if(otpForm) {
+            otpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const otp = document.getElementById('otpInput').value;
+                const savedId = sessionStorage.getItem('temp_id');
+                const otpBtn = document.getElementById('otpBtn');
+                
+                otpBtn.innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
+                otpBtn.disabled = true;
+
+                let verifyType = (currentAction === "forgot") ? 'recovery' : 'email';
+
+                const { data, error } = await supabaseClient.auth.verifyOtp({
+                    email: savedId,
+                    token: otp,
+                    type: verifyType
+                });
+
+                if (error) {
+                    alert("❌ Invalid OTP! गलत OTP, कृपया दोबारा चेक करें।");
+                    otpBtn.innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+                    otpBtn.disabled = false;
+                    return;
+                }
+
+                if (currentAction === "forgot") {
+                    const newPwd = document.getElementById('newPwd').value;
+                    const { error: updateError } = await supabaseClient.auth.updateUser({ password: newPwd });
+                    if (updateError) {
+                        alert("❌ Failed to update password: " + updateError.message);
+                    } else {
+                        alert("🎉 Password Changed Successfully! Please Login with your new password.");
+                        switchForm('login');
+                    }
+                } else {
+                    alert("🎉 Success! Welcome to Sanatan Capital.");
+                    window.location.href = "dashboard.html";
+                }
+                
+                otpBtn.innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+                otpBtn.disabled = false;
+            });
+        }
     </script>
+    
 </body>
 </html>
