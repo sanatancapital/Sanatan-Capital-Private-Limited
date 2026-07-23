@@ -142,16 +142,17 @@
 
     </div>
 
-    <!-- Supabase Library -->
+    <!-- 1. Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <!-- Master Backend Logic Script -->
+    <!-- 2. Master Backend Logic Script -->
     <script>
         // 1. Supabase Setup
         const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
 
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // 'supabaseClient' नाम से बनाया ताकि कोई टकराव न हो
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // 2. Form Switcher Logic
         window.switchForm = function(formName) {
@@ -168,11 +169,10 @@
             }
         }
 
-        // Wait for page to load completely before attaching events
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // 3. Registration System
-            document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        // 3. Registration System
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const emailInput = this.querySelector('input[type="email"]').value;
                 const submitBtn = this.querySelector('button');
@@ -180,7 +180,7 @@
                 submitBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
                 submitBtn.disabled = true;
 
-                const { data, error } = await supabase.auth.signInWithOtp({ email: emailInput });
+                const { data, error } = await supabaseClient.auth.signInWithOtp({ email: emailInput });
 
                 submitBtn.innerHTML = 'Register Now <i class="fas fa-arrow-right"></i>';
                 submitBtn.disabled = false;
@@ -193,9 +193,12 @@
                     switchForm('otp');
                 }
             });
+        }
 
-            // 4. Login System
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        // 4. Login System
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const emailInput = this.querySelector('input[type="text"]').value;
                 const submitBtn = this.querySelector('button');
@@ -203,22 +206,25 @@
                 submitBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
                 submitBtn.disabled = true;
 
-                const { data, error } = await supabase.auth.signInWithOtp({ email: emailInput });
+                const { data, error } = await supabaseClient.auth.signInWithOtp({ email: emailInput });
 
                 submitBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
                 submitBtn.disabled = false;
 
                 if (error) {
-                    alert("❌ Error: " + error.message);
+                    alert("❌ Error: " + error.message + "\n\n(Hint: अभी सिर्फ Email डालकर टेस्ट करें, मोबाइल नंबर नहीं)");
                 } else {
                     alert("✅ Login OTP sent to your Email ID: " + emailInput);
                     sessionStorage.setItem('dsa_email', emailInput);
                     switchForm('otp');
                 }
             });
+        }
 
-            // 5. Verify OTP System
-            document.getElementById('otpForm').addEventListener('submit', async function(e) {
+        // 5. Verify OTP System
+        const otpForm = document.getElementById('otpForm');
+        if (otpForm) {
+            otpForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const otpInput = this.querySelector('input[type="text"]').value;
                 const savedEmail = sessionStorage.getItem('dsa_email');
@@ -227,7 +233,7 @@
                 submitBtn.innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
                 submitBtn.disabled = true;
 
-                const { data, error } = await supabase.auth.verifyOtp({
+                const { data, error } = await supabaseClient.auth.verifyOtp({
                     email: savedEmail,
                     token: otpInput,
                     type: 'email'
@@ -243,7 +249,7 @@
                     window.location.href = "dashboard.html";
                 }
             });
-        });
+        }
     </script>
 </body>
 </html>
