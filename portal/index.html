@@ -4,262 +4,263 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DSA Portal - Sanatan Capital</title>
-    <!-- Google Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Main White Container -->
     <div class="premium-wrapper">
-        
-        <!-- Header: Logo & Badge -->
+        <!-- Header -->
         <header class="top-header">
             <img src="../assets/logo-horizontal.png" alt="Sanatan Capital Logo" class="brand-logo" onerror="this.onerror=null; this.src='https://sanatancapital.github.io/Sanatan-Capital-Private-Limited/assets/logo-horizontal.png';">
-            <div class="premium-badge">
-                <i class="fas fa-crown"></i> Premium DSA Partner Program
-            </div>
+            <div class="premium-badge"><i class="fas fa-crown"></i> Premium DSA Partner Program</div>
             <h1 class="main-heading">Partner With Us & Grow Your Income</h1>
             <p class="tagline">Join Sanatan Capital. Simple registration, zero investment, and fastest approvals.</p>
         </header>
 
-        <!-- Center Focused Form Area -->
+        <!-- Form Area -->
         <div class="form-container">
             
-            <!-- 1. REGISTRATION FORM (Default) -->
+            <!-- 1. REGISTRATION FORM -->
             <div id="register-box" class="form-box active">
                 <h3>Create Account <span class="hindi-text">पार्टनर बनें</span></h3>
-                <p class="sub-text">Basic details only. (KYC will be done inside the dashboard).</p>
+                <p class="sub-text">Register using Email or Mobile.</p>
                 <form id="registerForm">
                     <div class="input-group">
-                        <label>Full Name / पूरा नाम (As per PAN) <span style="color: red;">*</span></label>
-                        <input type="text" placeholder="Enter your full name" required>
-                    </div>
-                    <div class="form-row">
-                        <div class="input-group">
-                            <label>Mobile Number / मोबाइल नं. <span style="color: red;">*</span></label>
-                            <input type="tel" placeholder="10 Digit Number" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Email ID / ईमेल आईडी <span style="color: red;">*</span></label>
-                            <input type="email" placeholder="example@gmail.com" required>
-                        </div>
+                        <label>Full Name <span style="color: red;">*</span></label>
+                        <input type="text" id="regName" placeholder="As per PAN" required>
                     </div>
                     <div class="input-group">
-                        <label>Create Password / अपना पासवर्ड बनाएं <span style="color: red;">*</span></label>
-                        <input type="password" placeholder="Set a strong password" required>
+                        <label>Email ID or Mobile No. <span style="color: red;">*</span></label>
+                        <input type="text" id="regId" placeholder="example@gmail.com OR 9876543210" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Register Now <i class="fas fa-arrow-right"></i></button>
+                    <div class="input-group">
+                        <label>Create Password <span style="color: red;">*</span></label>
+                        <input type="password" id="regPwd" placeholder="Set a strong password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="regBtn">Send OTP to Register <i class="fas fa-arrow-right"></i></button>
                 </form>
                 <div class="form-footer">
                     <p class="switch-form">Already a partner? <a href="#" onclick="switchForm('login')">Login here</a></p>
                 </div>
             </div>
 
-            <!-- 2. LOGIN FORM (Hidden) -->
+            <!-- 2. LOGIN FORM (Password & OTP both) -->
             <div id="login-box" class="form-box">
                 <h3>Partner Login <span class="hindi-text">लॉग-इन करें</span></h3>
-                <p class="sub-text">Enter your Email ID to access your dashboard.</p>
-                
                 <form id="loginForm">
                     <div class="input-group">
-                        <label>Email ID / ईमेल आईडी <span style="color: red;">*</span></label>
-                        <input type="text" placeholder="Enter registered Email ID" required>
+                        <label>Email ID or Mobile No. <span style="color: red;">*</span></label>
+                        <input type="text" id="loginId" placeholder="Enter registered Email or Mobile" required>
                     </div>
-                    <div class="input-group">
-                        <label>Password / पासवर्ड <span style="color: red;">*</span></label>
-                        <input type="password" placeholder="Enter your password" required>
+                    <div class="input-group" id="passwordGroup">
+                        <label>Password <span style="color: red;">*</span></label>
+                        <input type="password" id="loginPwd" placeholder="Enter your password">
                     </div>
-                    <div style="text-align: right; margin-top: -10px; margin-bottom: 20px;">
-                        <a href="#" class="forgot-link">Forgot Password?</a>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.85rem;">
+                        <a href="#" onclick="switchForm('forgot')" class="forgot-link">Forgot Password?</a>
+                        <a href="#" onclick="toggleLoginMethod()" id="loginToggleBtn" style="color: var(--accent-gold); font-weight: 700; text-decoration: none;">Login via OTP instead</a>
                     </div>
-                    <button type="submit" class="btn btn-primary">Login to Dashboard <i class="fas fa-sign-in-alt"></i></button>
+                    <button type="submit" class="btn btn-primary" id="loginBtn">Login to Dashboard <i class="fas fa-sign-in-alt"></i></button>
                 </form>
                 <div class="form-footer">
                     <p class="switch-form">Don't have an account? <a href="#" onclick="switchForm('register')">Register as DSA</a></p>
                 </div>
             </div>
 
-            <!-- 3. OTP VERIFICATION FORM (Hidden) -->
-            <div id="otp-box" class="form-box">
-                <h3>Verify OTP <span class="hindi-text">OTP दर्ज करें</span></h3>
-                <p class="sub-text">Please enter the 6-digit OTP sent to your Email ID.</p>
-                
-                <form id="otpForm">
+            <!-- 3. FORGOT PASSWORD FORM -->
+            <div id="forgot-box" class="form-box">
+                <h3>Reset Password <span class="hindi-text">पासवर्ड बदलें</span></h3>
+                <p class="sub-text">Enter your Email/Mobile to receive a reset OTP.</p>
+                <form id="forgotForm">
                     <div class="input-group">
-                        <label>Enter OTP / ओटीपी <span style="color: red;">*</span></label>
-                        <input type="text" placeholder="XXXXXX" maxlength="6" pattern="\d{6}" required>
+                        <label>Email ID or Mobile No. <span style="color: red;">*</span></label>
+                        <input type="text" id="forgotId" placeholder="Registered Email or Mobile" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Verify & Register <i class="fas fa-check-circle"></i></button>
+                    <button type="submit" class="btn btn-primary" id="forgotBtn">Send Reset OTP <i class="fas fa-key"></i></button>
                 </form>
                 <div class="form-footer">
-                    <p class="switch-form">Didn't receive code? <a href="#" onclick="alert('New OTP Sent Successfully!')">Resend OTP</a></p>
-                    <p class="switch-form" style="margin-top: 15px;"><a href="#" onclick="switchForm('register')"><i class="fas fa-arrow-left"></i> Back to Registration</a></p>
+                    <p class="switch-form"><a href="#" onclick="switchForm('login')"><i class="fas fa-arrow-left"></i> Back to Login</a></p>
                 </div>
             </div>
 
-        </div>
-
-        <!-- Attractive Loan Products Grid -->
-        <div class="products-section">
-            <h3 class="section-title">What you can sell / आप क्या-क्या कर सकते हैं:</h3>
-            <div class="products-grid">
-                <!-- Card 1 -->
-                <div class="product-card">
-                    <div class="icon-box gold"><i class="fas fa-money-bill-wave"></i></div>
-                    <div class="card-text">
-                        <strong>Highest Payouts</strong>
-                        <span>Up to 1% & Above (As per Slab)</span>
+            <!-- 4. OTP VERIFICATION FORM (Universal) -->
+            <div id="otp-box" class="form-box">
+                <h3>Verify OTP <span class="hindi-text">OTP दर्ज करें</span></h3>
+                <p class="sub-text">Please enter the 6-digit OTP sent to you.</p>
+                <form id="otpForm">
+                    <div class="input-group">
+                        <label>Enter OTP <span style="color: red;">*</span></label>
+                        <input type="text" id="otpInput" placeholder="XXXXXX" maxlength="6" pattern="\d{6}" required>
                     </div>
-                </div>
-                <!-- Card 2 -->
-                <div class="product-card">
-                    <div class="icon-box blue"><i class="fas fa-building"></i></div>
-                    <div class="card-text">
-                        <strong>Business & Personal</strong>
-                        <span>Fast Unsecured & Secured Loans</span>
+                    <!-- Hidden field for New Password (only visible during password reset) -->
+                    <div class="input-group" id="newPwdGroup" style="display: none;">
+                        <label>Set New Password <span style="color: red;">*</span></label>
+                        <input type="password" id="newPwd" placeholder="Enter new password">
                     </div>
-                </div>
-                <!-- Card 3 -->
-                <div class="product-card">
-                    <div class="icon-box green"><i class="fas fa-home"></i></div>
-                    <div class="card-text">
-                        <strong>Property & Home</strong>
-                        <span>Home Loan & Loan Against Property</span>
-                    </div>
-                </div>
-                <!-- Card 4 -->
-                <div class="product-card">
-                    <div class="icon-box purple"><i class="fas fa-tractor"></i></div>
-                    <div class="card-text">
-                        <strong>Vehicle & Tractor</strong>
-                        <span>Commercial, Two & Four Wheeler</span>
-                    </div>
-                </div>
+                    <button type="submit" class="btn btn-primary" id="otpBtn">Verify & Proceed <i class="fas fa-check-circle"></i></button>
+                </form>
             </div>
-        </div>
 
+        </div>
     </div>
 
-    <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- Master Backend Logic Script -->
     <script>
-        // 1. Supabase Setup
         const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let currentAction = ""; // Tracks if user is registering, logging in, or resetting pwd
+        let loginMode = "password"; // Default login mode
 
-        // 2. Form Switcher Logic
+        // Smart Logic to detect if input is Email or Indian Mobile Number
+        function isMobile(input) { return /^\d{10}$/.test(input); }
+
         window.switchForm = function(formName) {
-            document.getElementById('login-box').classList.remove('active');
-            document.getElementById('register-box').classList.remove('active');
-            document.getElementById('otp-box').classList.remove('active');
+            document.querySelectorAll('.form-box').forEach(box => box.classList.remove('active'));
+            document.getElementById(formName + '-box').classList.add('active');
+            document.getElementById('newPwdGroup').style.display = 'none'; // Reset hidden fields
+        }
 
-            if (formName === 'register') {
-                document.getElementById('register-box').classList.add('active');
-            } else if (formName === 'login') {
-                document.getElementById('login-box').classList.add('active');
-            } else if (formName === 'otp') {
-                document.getElementById('otp-box').classList.add('active');
+        window.toggleLoginMethod = function() {
+            const pwdGroup = document.getElementById('passwordGroup');
+            const toggleBtn = document.getElementById('loginToggleBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (loginMode === "password") {
+                loginMode = "otp";
+                pwdGroup.style.display = "none";
+                document.getElementById('loginPwd').required = false;
+                toggleBtn.innerText = "Login via Password instead";
+                loginBtn.innerHTML = 'Send Login OTP <i class="fas fa-paper-plane"></i>';
+            } else {
+                loginMode = "password";
+                pwdGroup.style.display = "block";
+                document.getElementById('loginPwd').required = true;
+                toggleBtn.innerText = "Login via OTP instead";
+                loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
             }
         }
 
-        // 3. Registration System
-        const registerForm = document.getElementById('registerForm');
-        if (registerForm) {
-            registerForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const emailInput = this.querySelector('input[type="email"]').value.trim();
-                const submitBtn = this.querySelector('button');
+        // 1. REGISTER
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('regId').value;
+            const pwd = document.getElementById('regPwd').value;
+            document.getElementById('regBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+            
+            let authData = isMobile(id) ? { phone: '+91'+id, password: pwd } : { email: id, password: pwd };
+            const { error } = await supabase.auth.signUp(authData);
+
+            document.getElementById('regBtn').innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+            if (error) alert("❌ Error: " + error.message);
+            else {
+                alert("✅ OTP Sent to " + id);
+                sessionStorage.setItem('temp_id', id);
+                currentAction = "register";
+                switchForm('otp');
+            }
+        });
+
+        // 2. LOGIN (Password OR OTP)
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('loginId').value;
+            const pwd = document.getElementById('loginPwd').value;
+            document.getElementById('loginBtn').innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+
+            if (loginMode === "password") {
+                let authData = isMobile(id) ? { phone: '+91'+id, password: pwd } : { email: id, password: pwd };
+                const { error } = await supabase.auth.signInWithPassword(authData);
+                document.getElementById('loginBtn').innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
                 
-                submitBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
-                submitBtn.disabled = true;
-
-                const { data, error } = await supabaseClient.auth.signInWithOtp({ email: emailInput });
-
-                submitBtn.innerHTML = 'Register Now <i class="fas fa-arrow-right"></i>';
-                submitBtn.disabled = false;
-
-                if (error) {
-                    alert("❌ Error: " + error.message);
-                } else {
-                    alert("✅ OTP sent to your Email ID: " + emailInput);
-                    sessionStorage.setItem('dsa_email', emailInput);
+                if (error) alert("❌ Login Failed: " + error.message);
+                else window.location.href = "dashboard.html";
+            } else {
+                // OTP Login
+                let authData = isMobile(id) ? { phone: '+91'+id } : { email: id };
+                const { error } = await supabase.auth.signInWithOtp(authData);
+                document.getElementById('loginBtn').innerHTML = 'Send Login OTP <i class="fas fa-paper-plane"></i>';
+                
+                if (error) alert("❌ Error: " + error.message);
+                else {
+                    alert("✅ Login OTP Sent to " + id);
+                    sessionStorage.setItem('temp_id', id);
+                    currentAction = "login";
                     switchForm('otp');
                 }
+            }
+        });
+
+        // 3. FORGOT PASSWORD
+        document.getElementById('forgotForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('forgotId').value;
+            document.getElementById('forgotBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+
+            // Supabase handles password resets via email mostly. For phone, it's an OTP flow.
+            let error;
+            if (isMobile(id)) {
+                const res = await supabase.auth.signInWithOtp({ phone: '+91'+id });
+                error = res.error;
+            } else {
+                const res = await supabase.auth.resetPasswordForEmail(id);
+                error = res.error;
+            }
+
+            document.getElementById('forgotBtn').innerHTML = 'Send Reset OTP <i class="fas fa-key"></i>';
+            if (error) alert("❌ Error: " + error.message);
+            else {
+                alert("✅ Password Reset OTP Sent to " + id);
+                sessionStorage.setItem('temp_id', id);
+                currentAction = "forgot";
+                switchForm('otp');
+                document.getElementById('newPwdGroup').style.display = 'block'; // Show new password field
+                document.getElementById('newPwd').required = true;
+            }
+        });
+
+        // 4. VERIFY OTP (Handles all 3 scenarios)
+        document.getElementById('otpForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('otpInput').value;
+            const savedId = sessionStorage.getItem('temp_id');
+            document.getElementById('otpBtn').innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
+
+            let verifyType = isMobile(savedId) ? 'phone' : (currentAction === "forgot" && !isMobile(savedId) ? 'recovery' : 'email');
+            let verifyPhone = isMobile(savedId) ? '+91'+savedId : savedId;
+
+            const { data, error } = await supabase.auth.verifyOtp({
+                email: !isMobile(savedId) ? savedId : undefined,
+                phone: isMobile(savedId) ? verifyPhone : undefined,
+                token: otp,
+                type: verifyType
             });
-        }
 
-        // 4. Login System with Smart Filter
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) {
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const emailInput = this.querySelector('input[type="text"]').value.trim();
-                const submitBtn = this.querySelector('button');
-                
-                // SMART FILTER: Check if user entered numbers instead of email
-                if (/^\d+$/.test(emailInput)) {
-                    alert("⚠️ अभी मोबाइल SMS सर्विस चालू नहीं है। कृपया लॉगिन करने के लिए अपनी Email ID डालें।");
-                    return; // Stop the process here so it doesn't crash
-                }
+            if (error) {
+                alert("❌ Invalid OTP! गलत OTP, कृपया दोबारा चेक करें।");
+                document.getElementById('otpBtn').innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+                return;
+            }
 
-                submitBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
-                submitBtn.disabled = true;
-
-                const { data, error } = await supabaseClient.auth.signInWithOtp({ email: emailInput });
-
-                submitBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
-                submitBtn.disabled = false;
-
-                if (error) {
-                    alert("❌ Error: " + error.message);
+            // If it was a password reset, update the password now
+            if (currentAction === "forgot") {
+                const newPwd = document.getElementById('newPwd').value;
+                const { error: updateError } = await supabase.auth.updateUser({ password: newPwd });
+                if (updateError) {
+                    alert("❌ Failed to update password: " + updateError.message);
                 } else {
-                    alert("✅ Login OTP sent to your Email ID: " + emailInput);
-                    sessionStorage.setItem('dsa_email', emailInput);
-                    switchForm('otp');
+                    alert("🎉 Password Changed Successfully! Please Login.");
+                    switchForm('login');
                 }
-            });
-        }
-
-        // 5. Verify OTP System
-        const otpForm = document.getElementById('otpForm');
-        if (otpForm) {
-            otpForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const otpInput = this.querySelector('input[type="text"]').value.trim();
-                const savedEmail = sessionStorage.getItem('dsa_email');
-                const submitBtn = this.querySelector('button');
-                
-                if (!savedEmail) {
-                    alert("⚠️ Session expired. Please go back and enter your email again.");
-                    return;
-                }
-
-                submitBtn.innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
-                submitBtn.disabled = true;
-
-                const { data, error } = await supabaseClient.auth.verifyOtp({
-                    email: savedEmail,
-                    token: otpInput,
-                    type: 'email'
-                });
-
-                submitBtn.innerHTML = 'Verify & Register <i class="fas fa-check-circle"></i>';
-                submitBtn.disabled = false;
-
-                if (error) {
-                    alert("❌ Invalid OTP! आपने गलत OTP डाला है, कृपया दोबारा चेक करें।");
-                } else {
-                    alert("🎉 Verification Successful! \n\nWelcome to Sanatan Capital. Redirecting to your Dashboard...");
-                    window.location.href = "dashboard.html";
-                }
-            });
-        }
+            } else {
+                alert("🎉 Success! Welcome to Sanatan Capital.");
+                window.location.href = "dashboard.html";
+            }
+            document.getElementById('otpBtn').innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+        });
     </script>
 </body>
 </html>
