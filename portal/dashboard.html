@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <!-- SIMPLE KYC MODAL -->
+    <!-- STRICT VALIDATED KYC MODAL -->
     <div id="kycModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeKYCModal()">&times;</span>
@@ -153,11 +153,17 @@
             <form id="kycForm">
                 <div class="input-group">
                     <label>PAN Card Number <span style="color: red;">*</span></label>
-                    <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" required style="text-transform: uppercase;">
+                    <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" 
+                           pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" minlength="10" maxlength="10" 
+                           oninput="this.value = this.value.toUpperCase(); this.setCustomValidity('')" 
+                           oninvalid="this.setCustomValidity('कृपया सही 10 अंकों का PAN दर्ज करें (उदा: ABCDE1234F)')" required>
                 </div>
                 <div class="input-group">
                     <label>Aadhaar Number <span style="color: red;">*</span></label>
-                    <input type="text" id="aadhaarInput" placeholder="12 Digit Number" pattern="\d{12}" required>
+                    <input type="text" id="aadhaarInput" placeholder="12 Digit Number" 
+                           pattern="\d{12}" minlength="12" maxlength="12" 
+                           oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.setCustomValidity('')" 
+                           oninvalid="this.setCustomValidity('आधार 12 अंकों का ही होना चाहिए')" required>
                 </div>
                 <button type="submit" class="submit-btn" id="submitBtn">
                     Submit for Approval <i class="fas fa-arrow-right"></i>
@@ -166,7 +172,7 @@
         </div>
     </div>
 
-    <!-- ADD NEW LEAD MODAL (Dynamic Form) - [FIXED LOCATION] -->
+    <!-- STRICT VALIDATED LEAD MODAL -->
     <div id="leadModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeLeadModal()">&times;</span>
@@ -177,18 +183,26 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Customer Name <span style="color: red;">*</span></label>
-                        <input type="text" id="custName" placeholder="As per PAN Card" required>
+                        <input type="text" id="custName" placeholder="As per PAN Card" 
+                               oninput="this.setCustomValidity('')" 
+                               oninvalid="this.setCustomValidity('कृपया कस्टमर का नाम लिखें')" required>
                     </div>
                     <div class="input-group">
                         <label>Customer Mobile <span style="color: red;">*</span></label>
-                        <input type="text" id="custMobile" placeholder="10 Digit Number" pattern="\d{10}" required>
+                        <input type="text" id="custMobile" placeholder="10 Digit Number" 
+                               pattern="\d{10}" minlength="10" maxlength="10" 
+                               oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.setCustomValidity('')" 
+                               oninvalid="this.setCustomValidity('कस्टमर का मोबाइल नंबर 10 अंकों का ही होना चाहिए')" required>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Loan Category <span style="color: red;">*</span></label>
-                        <select id="loanType" required onchange="showDocumentFields()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 1rem;">
+                        <select id="loanType" required onchange="showDocumentFields()" 
+                                oninput="this.setCustomValidity('')" 
+                                oninvalid="this.setCustomValidity('कृपया लोन की केटेगरी चुनें')" 
+                                style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 1rem;">
                             <option value="">-- Select Loan Type --</option>
                             <option value="Personal Loan">Personal Loan (Unsecured)</option>
                             <option value="Business Loan">Business Loan (Unsecured)</option>
@@ -198,7 +212,9 @@
                     </div>
                     <div class="input-group">
                         <label>Loan Amount Needed <span style="color: red;">*</span></label>
-                        <input type="number" id="loanAmt" placeholder="Ex: 500000" required>
+                        <input type="number" id="loanAmt" placeholder="Ex: 500000" min="1000" 
+                               oninput="this.setCustomValidity('')" 
+                               oninvalid="this.setCustomValidity('कृपया लोन अमाउंट दर्ज करें')" required>
                     </div>
                 </div>
 
@@ -240,7 +256,7 @@
         </div>
     </div>
 
-    <!-- Supabase JavaScript [ALL JS MOVED HERE] -->
+    <!-- Supabase JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
@@ -252,11 +268,9 @@
 
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
         
-        // KYC Modal Controls
         function openKYCModal() { document.getElementById('kycModal').style.display = 'flex'; }
         function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
         
-        // Lead Modal Controls
         function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
         function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
 
@@ -280,7 +294,6 @@
             }
         }
 
-        // Updated KYC Check for Lead Form
         function checkKycForLead() {
             if(currentKycStatus === 'pending') {
                 alert("❌ You cannot add leads yet. Please submit your KYC details first!");
@@ -288,11 +301,10 @@
             } else if (currentKycStatus === 'submitted') {
                 alert("⏳ Your KYC is pending approval from Admin. Please wait.");
             } else if (currentKycStatus === 'approved') {
-                openLeadModal(); // KYC Approve hone par Lead Modal Khulega
+                openLeadModal(); 
             }
         }
 
-        // Show Dynamic Documents Based on Loan Type
         function showDocumentFields() {
             const loanType = document.getElementById('loanType').value;
             const docSection = document.getElementById('documentSection');
@@ -308,28 +320,23 @@
                 docSection.style.display = 'none';
             } else {
                 docSection.style.display = 'block'; 
-                
-                if(loanType === 'Personal Loan') {
-                    plDocs.style.display = 'block';
-                } else if(loanType === 'Business Loan') {
-                    blDocs.style.display = 'block';
-                } else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') {
-                    propDocs.style.display = 'block';
-                }
+                if(loanType === 'Personal Loan') { plDocs.style.display = 'block'; } 
+                else if(loanType === 'Business Loan') { blDocs.style.display = 'block'; } 
+                else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') { propDocs.style.display = 'block'; }
             }
         }
 
-        // Submit Lead Logic
         async function submitLead(statusType) {
+            // HTML5 Form Validation Trigger
+            const form = document.getElementById('leadForm');
+            if (!form.reportValidity()) {
+                return; // रुक जाएगा अगर कोई फील्ड गलत है या खाली है
+            }
+
             const cName = document.getElementById('custName').value;
             const cMobile = document.getElementById('custMobile').value;
             const lType = document.getElementById('loanType').value;
             const lAmt = document.getElementById('loanAmt').value;
-
-            if(!cName || !cMobile || !lType || !lAmt) {
-                alert("⚠️ Please fill all mandatory fields (Name, Mobile, Loan Type, Amount).");
-                return;
-            }
 
             const { error } = await supabaseClient
                 .from('leads')
@@ -358,7 +365,6 @@
             }
         }
 
-        // KYC Submission Logic
         document.getElementById('kycForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const pan = document.getElementById('panInput').value.toUpperCase();
