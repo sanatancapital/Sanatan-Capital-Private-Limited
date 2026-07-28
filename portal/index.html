@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +13,7 @@
 
     <div class="premium-wrapper">
         <header class="top-header">
-            <!-- लोगो को ठीक कर दिया गया है -->
             <img src="../assets/logo-horizontal.png" alt="Sanatan Capital Logo" class="brand-logo" style="max-width: 250px; height: auto; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;">
-            
             <div class="premium-badge"><i class="fas fa-crown"></i> Premium DSA Partner Program</div>
             <h1 class="main-heading">Partner With Us & Grow Your Income</h1>
             <p class="tagline">Join Sanatan Capital. Simple registration, zero investment, and fastest approvals.</p>
@@ -31,7 +30,6 @@
                         <label>Full Name / पूरा नाम <span style="color: red;">*</span></label>
                         <input type="text" id="regName" placeholder="As per PAN" required>
                     </div>
-                    <!-- Alag Alag Mobile aur Email Option -->
                     <div class="form-row">
                         <div class="input-group">
                             <label>Mobile No. <span style="color: red;">*</span></label>
@@ -148,7 +146,7 @@
             }
         }
 
-        // 1. REGISTER
+        // 1. SMART REGISTER LOGIC
         const registerForm = document.getElementById('registerForm');
         if(registerForm) {
             registerForm.addEventListener('submit', async (e) => {
@@ -158,29 +156,52 @@
                 const pwd = document.getElementById('regPwd').value;
                 const name = document.getElementById('regName').value;
 
-                document.getElementById('regBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
-                document.getElementById('regBtn').disabled = true;
+                const regBtn = document.getElementById('regBtn');
+                regBtn.innerHTML = 'Checking... <i class="fas fa-spinner fa-spin"></i>';
+                regBtn.disabled = true;
                 
-                const { error } = await supabaseClient.auth.signUp({ 
+                // Check if user already exists
+                const { data: existingUser } = await supabaseClient.from('dsa_partners').select('email').eq('email', email).single();
+                
+                if (existingUser) {
+                    alert("❌ You are already a registered partner! Please go to Login.");
+                    regBtn.innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+                    regBtn.disabled = false;
+                    switchForm('login');
+                    return;
+                }
+
+                regBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
+
+                // Sign up in Supabase Auth
+                const { error: authError } = await supabaseClient.auth.signUp({ 
                     email: email, 
                     password: pwd,
                     options: { data: { full_name: name, mobile_number: mobile } }
                 });
 
-                document.getElementById('regBtn').innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
-                document.getElementById('regBtn').disabled = false;
-
-                if (error) alert("❌ Error: " + error.message);
-                else {
-                    alert("✅ Registration OTP Sent to " + email);
-                    sessionStorage.setItem('temp_id', email);
-                    currentAction = "register";
-                    switchForm('otp');
+                if (authError) {
+                    alert("❌ Error: " + authError.message);
+                    regBtn.innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+                    regBtn.disabled = false;
+                    return;
                 }
+
+                // Insert into our new dsa_partners table
+                await supabaseClient.from('dsa_partners').insert([
+                    { full_name: name, email: email, mobile_number: mobile, status: 'pending' }
+                ]);
+
+                regBtn.innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+                regBtn.disabled = false;
+                alert("✅ Registration OTP Sent to " + email);
+                sessionStorage.setItem('temp_id', email);
+                currentAction = "register";
+                switchForm('otp');
             });
         }
 
-        // 2. LOGIN
+        // 2. SMART LOGIN LOGIC
         const loginForm = document.getElementById('loginForm');
         if(loginForm) {
             loginForm.addEventListener('submit', async (e) => {
@@ -189,20 +210,29 @@
                 const pwd = document.getElementById('loginPwd').value;
                 const loginBtn = document.getElementById('loginBtn');
                 
-                loginBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+                loginBtn.innerHTML = 'Checking... <i class="fas fa-spinner fa-spin"></i>';
                 loginBtn.disabled = true;
 
-                if (loginMode === "password") {
-                    const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: pwd });
-                    loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                // Verify if user is registered in our table
+                const { data: checkUser } = await supabaseClient.from('dsa_partners').select('email, status').eq('email', email).single();
+
+                if (!checkUser) {
+                    alert("❌ Account not found! Please Register as a DSA first.");
+                    loginBtn.innerHTML = (loginMode === "password") ? 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>' : 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
                     loginBtn.disabled = false;
+                    switchForm('register');
+                    return;
+                }
+
+                if (loginMode === "password") {
+                    loginBtn.innerHTML = 'Logging in... <i class="fas fa-spinner fa-spin"></i>';
+                    const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: pwd });
                     
-                    if (error) alert("❌ Login Failed: " + error.message);
+                    if (error) alert("❌ Login Failed: Incorrect Email or Password");
                     else window.location.href = "dashboard.html";
                 } else {
+                    loginBtn.innerHTML = 'Sending OTP... <i class="fas fa-spinner fa-spin"></i>';
                     const { error } = await supabaseClient.auth.signInWithOtp({ email: email });
-                    loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
-                    loginBtn.disabled = false;
                     
                     if (error) alert("❌ Error: " + error.message);
                     else {
@@ -212,6 +242,9 @@
                         switchForm('otp');
                     }
                 }
+                
+                loginBtn.innerHTML = (loginMode === "password") ? 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>' : 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+                loginBtn.disabled = false;
             });
         }
 
@@ -256,7 +289,7 @@
                 otpBtn.innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
                 otpBtn.disabled = true;
 
-                let verifyType = (currentAction === "forgot") ? 'recovery' : 'email';
+                let verifyType = (currentAction === "forgot") ? 'recovery' : (currentAction === "register" ? 'signup' : 'magiclink');
 
                 const { data, error } = await supabaseClient.auth.verifyOtp({
                     email: savedId,
