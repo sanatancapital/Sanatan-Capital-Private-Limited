@@ -80,7 +80,6 @@
     <!-- Sidebar Menu -->
     <div class="sidebar" id="sidebar">
         <div class="logo-area">
-            <!-- Replace with actual logo if needed -->
             <h2 style="color: var(--accent-gold);"><i class="fas fa-chart-line"></i> Sanatan</h2>
         </div>
         <ul class="nav-links">
@@ -89,7 +88,8 @@
             <li><a href="#"><i class="fas fa-history"></i> Lead History</a></li>
             <li><a href="#"><i class="fas fa-percentage"></i> Payout Slab</a></li>
             <li><a href="#"><i class="fas fa-user-check"></i> Complete KYC</a></li>
-            <li style="margin-top: auto;"><a href="index.html" style="color: #e11d48;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            <!-- Logout function attached here -->
+            <li style="margin-top: auto;"><a href="#" onclick="logoutUser()" style="color: #e11d48;"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
     </div>
 
@@ -100,12 +100,14 @@
         <header class="top-header">
             <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
             <div class="welcome-text">
-                <h2>Hello, Partner! 👋</h2>
+                <!-- Dynamic Name ID Added -->
+                <h2 id="userName">Loading... ⌛</h2>
                 <p>Welcome to your Sanatan Capital Dashboard</p>
             </div>
             <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name=Partner&background=1e3a8a&color=fff" alt="Profile">
-                <span>CC ID: 1001</span>
+                <!-- Dynamic Avatar ID Added -->
+                <img id="userAvatar" src="https://ui-avatars.com/api/?name=Partner&background=1e3a8a&color=fff" alt="Profile">
+                <span id="userMobile">Loading...</span>
             </div>
         </header>
 
@@ -152,11 +154,56 @@
 
     </div>
 
+    <!-- Supabase JavaScript Setup -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        // 1. Initialize Supabase
+        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         // Mobile Sidebar Toggle
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('show');
         }
+
+        // 2. Auth Guard & Fetch User Data
+        async function checkAuthAndLoadData() {
+            // Check if user is logged in
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            
+            if (!session) {
+                // Not logged in? Kick them back to login page
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // If logged in, fetch their details from dsa_partners table using their email
+            const userEmail = session.user.email;
+            const { data: userData, error: dbError } = await supabaseClient
+                .from('dsa_partners')
+                .select('full_name, mobile_number')
+                .eq('email', userEmail)
+                .single();
+
+            if (userData) {
+                // Put their actual name and mobile number on the dashboard
+                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
+                document.getElementById('userMobile').innerText = userData.mobile_number;
+                
+                // Create a dynamic profile picture based on their name
+                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
+            }
+        }
+
+        // 3. Logout Function
+        async function logoutUser() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        // Run the check as soon as the page loads
+        checkAuthAndLoadData();
     </script>
 </body>
 </html>
