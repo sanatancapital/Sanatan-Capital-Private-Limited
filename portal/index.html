@@ -3,200 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DSA Partner Login | Sanatan Capital</title>
-    <style>
-        /* --- Base & Reset --- */
-        body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f3f4f6; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-        }
-
-        /* --- Login Card --- */
-        .login-card { 
-            background: #ffffff; 
-            padding: 40px 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08); 
-            width: 100%; 
-            max-width: 380px; 
-            box-sizing: border-box;
-        }
-
-        /* --- Branding --- */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .logo { 
-            font-size: 26px; 
-            font-weight: 800; 
-            color: #1e3a8a; /* Deep Navy Blue */
-            letter-spacing: 0.5px;
-        }
-        .logo span { 
-            color: #d97706; /* Golden/Saffron Accent */
-        }
-        .subtitle { 
-            color: #64748b; 
-            margin-top: 5px; 
-            font-size: 14px; 
-            font-weight: 500;
-        }
-
-        /* --- Form Elements --- */
-        .input-group { 
-            text-align: left; 
-            margin-bottom: 20px; 
-        }
-        .input-group label { 
-            display: block; 
-            margin-bottom: 8px; 
-            color: #334155; 
-            font-size: 14px; 
-            font-weight: 600; 
-        }
-        .input-group input { 
-            width: 100%; 
-            padding: 14px; 
-            border: 1.5px solid #cbd5e1; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
-            font-size: 15px; 
-            transition: all 0.3s ease; 
-        }
-        .input-group input:focus { 
-            border-color: #1e3a8a; 
-            outline: none; 
-            box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1); 
-        }
-
-        /* --- Buttons --- */
-        .btn-primary { 
-            background-color: #1e3a8a; 
-            color: white; 
-            border: none; 
-            padding: 14px; 
-            width: 100%; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: background-color 0.3s; 
-        }
-        .btn-primary:hover { 
-            background-color: #172554; 
-        }
-        .btn-primary:disabled {
-            background-color: #94a3b8;
-            cursor: not-allowed;
-        }
-
-        /* --- Helpers --- */
-        .help-text { 
-            margin-top: 25px; 
-            font-size: 14px; 
-            color: #64748b; 
-            text-align: center;
-        }
-        .help-text a { 
-            color: #d97706; 
-            text-decoration: none; 
-            font-weight: 700; 
-        }
-        .help-text a:hover {
-            text-decoration: underline;
-        }
-
-        /* --- OTP Section Hidden by Default --- */
-        #otp-section { 
-            display: none; 
-        }
-        .message-box {
-            font-size: 13px;
-            color: #059669; /* Green for success */
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: 500;
-        }
-    </style>
+    <title>DSA Portal - Sanatan Capital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="login-card">
-        <div class="logo-container">
-            <div class="logo">Sanatan <span>Capital</span></div>
-            <div class="subtitle">Secure DSA Partner Login</div>
-        </div>
-        
-        <form id="authForm">
+    <div class="premium-wrapper">
+        <header class="top-header">
+            <!-- लोगो को ठीक कर दिया गया है -->
+            <img src="../assets/logo-horizontal.png" alt="Sanatan Capital Logo" class="brand-logo" style="max-width: 250px; height: auto; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;">
             
-            <!-- Step 1: Email Input -->
-            <div id="identity-section">
-                <div class="input-group">
-                    <label for="email">Registered Email Address</label>
-                    <input type="email" id="email" placeholder="partner@example.com" required autocomplete="email">
+            <div class="premium-badge"><i class="fas fa-crown"></i> Premium DSA Partner Program</div>
+            <h1 class="main-heading">Partner With Us & Grow Your Income</h1>
+            <p class="tagline">Join Sanatan Capital. Simple registration, zero investment, and fastest approvals.</p>
+        </header>
+
+        <div class="form-container">
+            
+            <!-- 1. REGISTRATION FORM -->
+            <div id="register-box" class="form-box active">
+                <h3>Create Account <span class="hindi-text">पार्टनर बनें</span></h3>
+                <p class="sub-text">Basic details only. (KYC inside dashboard).</p>
+                <form id="registerForm">
+                    <div class="input-group">
+                        <label>Full Name / पूरा नाम <span style="color: red;">*</span></label>
+                        <input type="text" id="regName" placeholder="As per PAN" required>
+                    </div>
+                    <!-- Alag Alag Mobile aur Email Option -->
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label>Mobile No. <span style="color: red;">*</span></label>
+                            <input type="tel" id="regMobile" placeholder="10 Digit Number" pattern="\d{10}" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Email ID <span style="color: red;">*</span></label>
+                            <input type="email" id="regEmail" placeholder="example@gmail.com" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Create Password <span style="color: red;">*</span></label>
+                        <input type="password" id="regPwd" placeholder="Set a strong password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="regBtn">Send OTP to Register <i class="fas fa-arrow-right"></i></button>
+                </form>
+                <div class="form-footer">
+                    <p class="switch-form">Already a partner? <a href="#" onclick="switchForm('login')">Login here</a></p>
                 </div>
-                <button type="button" class="btn-primary" id="btn-send-otp" onclick="handleSendOTP()">Send Secure OTP</button>
             </div>
 
-            <!-- Step 2: OTP Input (Appears after Step 1) -->
-            <div id="otp-section">
-                <div class="message-box" id="otp-message"></div>
-                <div class="input-group">
-                    <label for="otp">Enter 6-Digit OTP</label>
-                    <input type="number" id="otp" placeholder="0 0 0 0 0 0" maxlength="6">
+            <!-- 2. LOGIN FORM -->
+            <div id="login-box" class="form-box">
+                <h3>Partner Login <span class="hindi-text">लॉग-इन करें</span></h3>
+                <form id="loginForm">
+                    <div class="input-group">
+                        <label>Email ID <span style="color: red;">*</span></label>
+                        <input type="email" id="loginId" placeholder="Enter registered Email" required>
+                    </div>
+                    <div class="input-group" id="passwordGroup">
+                        <label>Password <span style="color: red;">*</span></label>
+                        <input type="password" id="loginPwd" placeholder="Enter your password">
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.85rem;">
+                        <a href="#" onclick="switchForm('forgot')" class="forgot-link">Forgot Password?</a>
+                        <a href="#" onclick="toggleLoginMethod()" id="loginToggleBtn" style="color: var(--accent-gold); font-weight: 700; text-decoration: none;">Login via OTP instead</a>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="loginBtn">Login to Dashboard <i class="fas fa-sign-in-alt"></i></button>
+                </form>
+                <div class="form-footer">
+                    <p class="switch-form">Don't have an account? <a href="#" onclick="switchForm('register')">Register as DSA</a></p>
                 </div>
-                <button type="button" class="btn-primary" onclick="handleLogin()">Verify & Login</button>
             </div>
 
-        </form>
+            <!-- 3. FORGOT PASSWORD FORM -->
+            <div id="forgot-box" class="form-box">
+                <h3>Reset Password <span class="hindi-text">पासवर्ड बदलें</span></h3>
+                <p class="sub-text">Enter your Email to receive a reset OTP.</p>
+                <form id="forgotForm">
+                    <div class="input-group">
+                        <label>Email ID <span style="color: red;">*</span></label>
+                        <input type="email" id="forgotId" placeholder="Registered Email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="forgotBtn">Send Reset OTP <i class="fas fa-key"></i></button>
+                </form>
+                <div class="form-footer">
+                    <p class="switch-form"><a href="#" onclick="switchForm('login')"><i class="fas fa-arrow-left"></i> Back to Login</a></p>
+                </div>
+            </div>
 
-        <div class="help-text" id="footer-text">
-            Not registered yet? <a href="#">Apply as DSA</a>
+            <!-- 4. OTP VERIFICATION FORM -->
+            <div id="otp-box" class="form-box">
+                <h3>Verify OTP <span class="hindi-text">OTP दर्ज करें</span></h3>
+                <p class="sub-text">Please enter the 6-digit OTP sent to your Email.</p>
+                <form id="otpForm">
+                    <div class="input-group">
+                        <label>Enter OTP <span style="color: red;">*</span></label>
+                        <input type="text" id="otpInput" placeholder="XXXXXX" maxlength="6" pattern="\d{6}" required>
+                    </div>
+                    <div class="input-group" id="newPwdGroup" style="display: none;">
+                        <label>Set New Password <span style="color: red;">*</span></label>
+                        <input type="password" id="newPwd" placeholder="Enter new password">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="otpBtn">Verify & Proceed <i class="fas fa-check-circle"></i></button>
+                </form>
+            </div>
+
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // यह फंक्शन बाद में Supabase के साथ कनेक्ट होगा
-        function handleSendOTP() {
-            const emailInput = document.getElementById('email').value;
-            const btn = document.getElementById('btn-send-otp');
-            
-            if(emailInput.trim() === "") {
-                alert("Please enter your registered email address.");
-                return;
-            }
+        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-            // लोडिंग एनीमेशन (ताकि यूज़र को लगे प्रोसेस हो रहा है)
-            btn.innerText = "Verifying Details...";
-            btn.disabled = true;
+        let currentAction = ""; 
+        let loginMode = "password"; 
 
-            // फिलहाल इसे 1.5 सेकंड का डेमो दिया है, असली में यहाँ Supabase का कोड आएगा
-            setTimeout(() => {
-                // फॉर्म बदलें
-                document.getElementById('identity-section').style.display = 'none';
-                document.getElementById('otp-section').style.display = 'block';
-                
-                // मैसेज दिखाएं
-                document.getElementById('otp-message').innerText = "✅ OTP has been sent securely to " + emailInput;
-                document.getElementById('footer-text').style.display = 'none';
-            }, 1500);
+        window.switchForm = function(formName) {
+            document.querySelectorAll('.form-box').forEach(box => box.classList.remove('active'));
+            document.getElementById(formName + '-box').classList.add('active');
+            const newPwdGroup = document.getElementById('newPwdGroup');
+            if(newPwdGroup) newPwdGroup.style.display = 'none';
         }
 
-        // OTP वेरीफाई करने का फंक्शन
-        function handleLogin() {
-            const otpInput = document.getElementById('otp').value;
-            if(otpInput.length < 6) {
-                alert("Please enter a valid 6-digit OTP");
-                return;
+        window.toggleLoginMethod = function() {
+            const pwdGroup = document.getElementById('passwordGroup');
+            const toggleBtn = document.getElementById('loginToggleBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (loginMode === "password") {
+                loginMode = "otp";
+                pwdGroup.style.display = "none";
+                document.getElementById('loginPwd').required = false;
+                toggleBtn.innerText = "Login via Password instead";
+                loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+            } else {
+                loginMode = "password";
+                pwdGroup.style.display = "block";
+                document.getElementById('loginPwd').required = true;
+                toggleBtn.innerText = "Login via OTP instead";
+                loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
             }
-            // डैशबोर्ड पर ले जाने का कोड यहाँ आएगा
-            alert("Login Successful! Redirecting to Partner Dashboard...");
+        }
+
+        // 1. REGISTER
+        const registerForm = document.getElementById('registerForm');
+        if(registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('regEmail').value;
+                const mobile = document.getElementById('regMobile').value;
+                const pwd = document.getElementById('regPwd').value;
+                const name = document.getElementById('regName').value;
+
+                document.getElementById('regBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+                document.getElementById('regBtn').disabled = true;
+                
+                const { error } = await supabaseClient.auth.signUp({ 
+                    email: email, 
+                    password: pwd,
+                    options: { data: { full_name: name, mobile_number: mobile } }
+                });
+
+                document.getElementById('regBtn').innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
+                document.getElementById('regBtn').disabled = false;
+
+                if (error) alert("❌ Error: " + error.message);
+                else {
+                    alert("✅ Registration OTP Sent to " + email);
+                    sessionStorage.setItem('temp_id', email);
+                    currentAction = "register";
+                    switchForm('otp');
+                }
+            });
+        }
+
+        // 2. LOGIN
+        const loginForm = document.getElementById('loginForm');
+        if(loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginId').value;
+                const pwd = document.getElementById('loginPwd').value;
+                const loginBtn = document.getElementById('loginBtn');
+                
+                loginBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
+                loginBtn.disabled = true;
+
+                if (loginMode === "password") {
+                    const { error } = await supabaseClient.auth.signInWithPassword({ email: email, password: pwd });
+                    loginBtn.innerHTML = 'Login to Dashboard <i class="fas fa-sign-in-alt"></i>';
+                    loginBtn.disabled = false;
+                    
+                    if (error) alert("❌ Login Failed: " + error.message);
+                    else window.location.href = "dashboard.html";
+                } else {
+                    const { error } = await supabaseClient.auth.signInWithOtp({ email: email });
+                    loginBtn.innerHTML = 'Send Login OTP to Email <i class="fas fa-paper-plane"></i>';
+                    loginBtn.disabled = false;
+                    
+                    if (error) alert("❌ Error: " + error.message);
+                    else {
+                        alert("✅ Login OTP Sent to " + email);
+                        sessionStorage.setItem('temp_id', email);
+                        currentAction = "login";
+                        switchForm('otp');
+                    }
+                }
+            });
+        }
+
+        // 3. FORGOT PASSWORD
+        const forgotForm = document.getElementById('forgotForm');
+        if(forgotForm) {
+            forgotForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('forgotId').value;
+
+                document.getElementById('forgotBtn').innerHTML = 'Sending... <i class="fas fa-spinner fa-spin"></i>';
+                document.getElementById('forgotBtn').disabled = true;
+
+                const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+
+                document.getElementById('forgotBtn').innerHTML = 'Send Reset OTP <i class="fas fa-key"></i>';
+                document.getElementById('forgotBtn').disabled = false;
+
+                if (error) alert("❌ Error: " + error.message);
+                else {
+                    alert("✅ Password Reset OTP Sent to " + email);
+                    sessionStorage.setItem('temp_id', email);
+                    currentAction = "forgot";
+                    switchForm('otp');
+                    
+                    const newPwdGroup = document.getElementById('newPwdGroup');
+                    if(newPwdGroup) newPwdGroup.style.display = 'block';
+                    document.getElementById('newPwd').required = true;
+                }
+            });
+        }
+
+        // 4. VERIFY OTP
+        const otpForm = document.getElementById('otpForm');
+        if(otpForm) {
+            otpForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const otp = document.getElementById('otpInput').value;
+                const savedId = sessionStorage.getItem('temp_id');
+                const otpBtn = document.getElementById('otpBtn');
+                
+                otpBtn.innerHTML = 'Verifying... <i class="fas fa-spinner fa-spin"></i>';
+                otpBtn.disabled = true;
+
+                let verifyType = (currentAction === "forgot") ? 'recovery' : 'email';
+
+                const { data, error } = await supabaseClient.auth.verifyOtp({
+                    email: savedId,
+                    token: otp,
+                    type: verifyType
+                });
+
+                if (error) {
+                    alert("❌ Invalid OTP! गलत OTP, कृपया दोबारा चेक करें।");
+                    otpBtn.innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+                    otpBtn.disabled = false;
+                    return;
+                }
+
+                if (currentAction === "forgot") {
+                    const newPwd = document.getElementById('newPwd').value;
+                    const { error: updateError } = await supabaseClient.auth.updateUser({ password: newPwd });
+                    if (updateError) {
+                        alert("❌ Failed to update password: " + updateError.message);
+                    } else {
+                        alert("🎉 Password Changed Successfully! Please Login with your new password.");
+                        switchForm('login');
+                    }
+                } else {
+                    alert("🎉 Success! Welcome to Sanatan Capital.");
+                    window.location.href = "dashboard.html";
+                }
+                
+                otpBtn.innerHTML = 'Verify & Proceed <i class="fas fa-check-circle"></i>';
+                otpBtn.disabled = false;
+            });
         }
     </script>
 </body>
