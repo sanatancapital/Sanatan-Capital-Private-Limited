@@ -241,6 +241,101 @@
                 btn.disabled = false;
             }
         });
+    <!-- ADD NEW LEAD MODAL (Dynamic Form) -->
+    <div id="leadModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-btn" onclick="closeLeadModal()">&times;</span>
+            <h3><i class="fas fa-file-signature"></i> Log New File (Lead)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Enter customer details and upload available documents.</p>
+            
+            <form id="leadForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Customer Name <span style="color: red;">*</span></label>
+                        <input type="text" id="custName" placeholder="As per PAN Card" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Customer Mobile <span style="color: red;">*</span></label>
+                        <input type="text" id="custMobile" placeholder="10 Digit Number" pattern="\d{10}" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>Loan Category <span style="color: red;">*</span></label>
+                        <select id="loanType" required onchange="showDocumentFields()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 1rem;">
+                            <option value="">-- Select Loan Type --</option>
+                            <option value="Personal Loan">Personal Loan (Unsecured)</option>
+                            <option value="Business Loan">Business Loan (Unsecured)</option>
+                            <option value="Home Loan">Home Loan (Secured)</option>
+                            <option value="Loan Against Property">LAP (Secured)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Loan Amount Needed <span style="color: red;">*</span></label>
+                        <input type="number" id="loanAmt" placeholder="Ex: 500000" required>
+                    </div>
+                </div>
+
+                <!-- DYNAMIC DOCUMENT UPLOAD SECTION -->
+                <div id="documentSection" style="display: none; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1;">
+                    <h4 style="margin-bottom: 15px; color: var(--primary-dark); font-size: 0.95rem;">Required Documents <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Upload PDF/JPG - Max 5MB)</span></h4>
+                    
+                    <!-- Common Docs (Always show if loan selected) -->
+                    <div class="input-group">
+                        <label>PAN Card & Aadhaar (Merged)</label>
+                        <input type="file" id="docKyc" accept=".pdf, .jpg, .jpeg, .png">
+                    </div>
+
+                    <!-- Personal Loan Docs -->
+                    <div id="plDocs" style="display: none;">
+                        <div class="input-group">
+                            <label>Last 3 Months Salary Slips</label>
+                            <input type="file" id="docIncomePL" accept=".pdf">
+                        </div>
+                        <div class="input-group">
+                            <label>Last 6 Months Bank Statement</label>
+                            <input type="file" id="docBankPL" accept=".pdf">
+                        </div>
+                    </div>
+
+                    <!-- Business Loan Docs -->
+                    <div id="blDocs" style="display: none;">
+                        <div class="input-group">
+                            <label>Last 1 Year ITR & GST Certificate</label>
+                            <input type="file" id="docIncomeBL" accept=".pdf">
+                        </div>
+                        <div class="input-group">
+                            <label>Current Account Statement (12 Months)</label>
+                            <input type="file" id="docBankBL" accept=".pdf">
+                        </div>
+                    </div>
+
+                    <!-- Property Loan Docs (Home Loan / LAP) -->
+                    <div id="propDocs" style="display: none;">
+                        <div class="input-group">
+                            <label>Income Proof (ITR / Salary Slip)</label>
+                            <input type="file" id="docIncomeProp" accept=".pdf">
+                        </div>
+                        <div class="input-group">
+                            <label>Property Documents (Registry/Chain)</label>
+                            <input type="file" id="docProperty" accept=".pdf">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DUAL ACTION BUTTONS -->
+                <div style="display: flex; gap: 15px;">
+                    <button type="button" onclick="submitLead('Draft')" style="flex: 1; padding: 12px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                        <i class="fas fa-save"></i> Save as Draft
+                    </button>
+                    <button type="button" onclick="submitLead('Pending')" style="flex: 1; padding: 12px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
+                        Final Submit <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
         async function logoutUser() {
             await supabaseClient.auth.signOut();
