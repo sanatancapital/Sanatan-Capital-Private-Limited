@@ -67,19 +67,14 @@
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background-color: var(--white); padding: 30px; border-radius: 12px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
-        .modal-content h3 { margin-bottom: 5px; color: var(--primary-dark); }
-        .fee-badge { display: inline-block; background: #e0e7ff; color: #4338ca; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; margin-bottom: 20px;}
+        .modal-content h3 { margin-bottom: 10px; color: var(--primary-dark); }
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; color: var(--primary-dark); }
         .input-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
         .input-group input:focus { border-color: var(--primary-blue); }
         
-        .pay-btn { width: 100%; padding: 14px; background: #059669; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.2s;}
-        .pay-btn:hover { background: #047857; }
-
-        /* Loader */
-        .processing-box { display: none; text-align: center; padding: 20px 0; }
-        .processing-box i { font-size: 3rem; color: var(--primary-blue); margin-bottom: 15px; }
+        .submit-btn { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s;}
+        .submit-btn:hover { background: #1e40af; }
 
         @media (max-width: 900px) {
             .sidebar { transform: translateX(-100%); }
@@ -123,9 +118,9 @@
         <div class="kyc-alert" id="kycAlertBox">
             <div>
                 <h4><i class="fas fa-exclamation-triangle"></i> Action Required: Complete Your KYC</h4>
-                <p>Your account is restricted. Complete instant Aadhaar verification to start adding leads.</p>
+                <p>Your account is restricted. Please submit your PAN and Aadhaar details to start adding leads.</p>
             </div>
-            <button class="btn-kyc" onclick="openKYCModal()">Verify Now</button>
+            <button class="btn-kyc" onclick="openKYCModal()">Submit Details</button>
         </div>
 
         <div class="stats-grid">
@@ -148,35 +143,26 @@
         </div>
     </div>
 
-    <!-- PAYMENT & KYC MODAL -->
+    <!-- SIMPLE KYC MODAL -->
     <div id="kycModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" onclick="closeKYCModal()">&times;</span>
-            <div id="kycFormArea">
-                <h3>Instant KYC Verification</h3>
-                <div class="fee-badge"><i class="fas fa-shield-alt"></i> API Verification Fee: ₹5 Only</div>
-                
-                <form id="kycForm">
-                    <div class="input-group">
-                        <label>PAN Card Number <span style="color: red;">*</span></label>
-                        <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" required style="text-transform: uppercase;">
-                    </div>
-                    <div class="input-group">
-                        <label>Aadhaar Number <span style="color: red;">*</span></label>
-                        <input type="text" id="aadhaarInput" placeholder="12 Digit Number" pattern="\d{12}" required>
-                    </div>
-                    <button type="submit" class="pay-btn" id="payBtn">
-                        <i class="fas fa-lock"></i> Pay ₹5 & Verify Automatically
-                    </button>
-                </form>
-            </div>
-
-            <!-- Fake Processing UI -->
-            <div id="processingArea" class="processing-box">
-                <i class="fas fa-circle-notch fa-spin"></i>
-                <h3 style="color: var(--primary-dark);">Processing Payment...</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">Please do not close or refresh this window.</p>
-            </div>
+            <h3>Submit KYC Details</h3>
+            <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details exactly as per your documents.</p>
+            
+            <form id="kycForm">
+                <div class="input-group">
+                    <label>PAN Card Number <span style="color: red;">*</span></label>
+                    <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}" required style="text-transform: uppercase;">
+                </div>
+                <div class="input-group">
+                    <label>Aadhaar Number <span style="color: red;">*</span></label>
+                    <input type="text" id="aadhaarInput" placeholder="12 Digit Number" pattern="\d{12}" required>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit for Approval <i class="fas fa-arrow-right"></i>
+                </button>
+            </form>
         </div>
     </div>
 
@@ -191,11 +177,7 @@
         let currentKycStatus = "pending";
 
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
-        function openKYCModal() { 
-            document.getElementById('kycModal').style.display = 'flex'; 
-            document.getElementById('kycFormArea').style.display = 'block';
-            document.getElementById('processingArea').style.display = 'none';
-        }
+        function openKYCModal() { document.getElementById('kycModal').style.display = 'flex'; }
         function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
 
         async function checkAuthAndLoadData() {
@@ -212,50 +194,52 @@
                 document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
                 currentKycStatus = userData.kyc_status;
                 
-                if(currentKycStatus === 'approved') {
+                // Hide alert if KYC is already submitted or approved
+                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
                     document.getElementById('kycAlertBox').style.display = 'none';
                 }
             }
         }
 
         function checkKycForLead() {
-            if(currentKycStatus !== 'approved') {
-                alert("❌ You cannot add leads yet. Please complete your ₹5 KYC Verification first!");
+            if(currentKycStatus === 'pending') {
+                alert("❌ You cannot add leads yet. Please submit your KYC details first!");
                 openKYCModal();
+            } else if (currentKycStatus === 'submitted') {
+                alert("⏳ Your KYC is pending approval from Admin. Please wait.");
             } else {
-                alert("✅ Lead Form will open here."); // Next step will be replacing this with lead form link
+                alert("✅ Lead Form will open here."); // Next step: lead form link
             }
         }
 
-        // SIMULATED PAYMENT & KYC SUBMISSION
+        // SIMPLE KYC SUBMISSION
         document.getElementById('kycForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const pan = document.getElementById('panInput').value.toUpperCase();
             const aadhaar = document.getElementById('aadhaarInput').value;
+            const btn = document.getElementById('submitBtn');
             
-            // 1. Show Processing UI (Simulating Payment Gateway)
-            document.getElementById('kycFormArea').style.display = 'none';
-            document.getElementById('processingArea').style.display = 'block';
+            btn.innerHTML = 'Submitting... <i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
 
-            // 2. Wait 3 seconds to simulate payment and API check
-            setTimeout(async () => {
-                // 3. Save to Supabase as 'approved' automatically
-                const { error } = await supabaseClient
-                    .from('dsa_partners')
-                    .update({ pan_number: pan, aadhaar_number: aadhaar, kyc_status: 'approved' })
-                    .eq('email', currentUserEmail);
+            // Save to Supabase as 'submitted'
+            const { error } = await supabaseClient
+                .from('dsa_partners')
+                .update({ pan_number: pan, aadhaar_number: aadhaar, kyc_status: 'submitted' })
+                .eq('email', currentUserEmail);
 
-                if (error) {
-                    alert("❌ Payment Failed or Error: " + error.message);
-                    document.getElementById('kycFormArea').style.display = 'block';
-                    document.getElementById('processingArea').style.display = 'none';
-                } else {
-                    alert("✅ Payment Successful! Aadhaar Verified. Your account is now Approved.");
-                    currentKycStatus = 'approved';
-                    closeKYCModal();
-                    document.getElementById('kycAlertBox').style.display = 'none'; 
-                }
-            }, 3000);
+            if (error) {
+                alert("❌ Error: " + error.message);
+                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            } else {
+                alert("✅ Details Submitted Successfully! Pending Admin Approval.");
+                currentKycStatus = 'submitted';
+                closeKYCModal();
+                document.getElementById('kycAlertBox').style.display = 'none'; 
+                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            }
         });
 
         async function logoutUser() {
