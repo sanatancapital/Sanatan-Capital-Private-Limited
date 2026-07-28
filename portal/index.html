@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -146,7 +145,7 @@
             }
         }
 
-        // 1. SMART REGISTER LOGIC
+        // 1. SMART REGISTER LOGIC (UPDATED WITH MOBILE CHECK)
         const registerForm = document.getElementById('registerForm');
         if(registerForm) {
             registerForm.addEventListener('submit', async (e) => {
@@ -160,11 +159,23 @@
                 regBtn.innerHTML = 'Checking... <i class="fas fa-spinner fa-spin"></i>';
                 regBtn.disabled = true;
                 
-                // Check if user already exists
-                const { data: existingUser } = await supabaseClient.from('dsa_partners').select('email').eq('email', email).single();
+                // NEW LOGIC: Check if EMAIL or MOBILE already exists
+                const { data: existingUsers } = await supabaseClient
+                    .from('dsa_partners')
+                    .select('email, mobile_number')
+                    .or(`email.eq.${email},mobile_number.eq.${mobile}`);
                 
-                if (existingUser) {
-                    alert("❌ You are already a registered partner! Please go to Login.");
+                if (existingUsers && existingUsers.length > 0) {
+                    // Check exactly what is duplicate to show proper message
+                    let isEmailDuplicate = existingUsers.some(u => u.email === email);
+                    let isMobileDuplicate = existingUsers.some(u => u.mobile_number === mobile);
+                    
+                    if (isMobileDuplicate) {
+                        alert("❌ This Mobile Number is already registered! Please Login.");
+                    } else if (isEmailDuplicate) {
+                        alert("❌ This Email ID is already registered! Please Login.");
+                    }
+                    
                     regBtn.innerHTML = 'Send OTP to Register <i class="fas fa-arrow-right"></i>';
                     regBtn.disabled = false;
                     switchForm('login');
