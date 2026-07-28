@@ -63,15 +63,15 @@
         .bg-gold { background: #fffbeb; color: #d97706; }
         .bg-purple { background: #faf5ff; color: #6b21a8; }
 
-        /* KYC Modal Styles */
+        /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center; }
         .modal-content { background-color: var(--white); padding: 30px; border-radius: 12px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
         .modal-content h3 { margin-bottom: 10px; color: var(--primary-dark); }
         .input-group { margin-bottom: 15px; text-align: left; }
         .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; color: var(--primary-dark); }
-        .input-group input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
-        .input-group input:focus { border-color: var(--primary-blue); }
+        .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
+        .input-group input:focus, .input-group select:focus { border-color: var(--primary-blue); }
         
         .submit-btn { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s;}
         .submit-btn:hover { background: #1e40af; }
@@ -166,82 +166,7 @@
         </div>
     </div>
 
-    <!-- Supabase JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let currentUserEmail = "";
-        let currentKycStatus = "pending";
-
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
-        function openKYCModal() { document.getElementById('kycModal').style.display = 'flex'; }
-        function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
-
-        async function checkAuthAndLoadData() {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
-
-            currentUserEmail = session.user.email;
-            
-            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
-
-            if (userData) {
-                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
-                document.getElementById('userMobile').innerText = userData.mobile_number;
-                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
-                currentKycStatus = userData.kyc_status;
-                
-                // Hide alert if KYC is already submitted or approved
-                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
-                    document.getElementById('kycAlertBox').style.display = 'none';
-                }
-            }
-        }
-
-        function checkKycForLead() {
-            if(currentKycStatus === 'pending') {
-                alert("❌ You cannot add leads yet. Please submit your KYC details first!");
-                openKYCModal();
-            } else if (currentKycStatus === 'submitted') {
-                alert("⏳ Your KYC is pending approval from Admin. Please wait.");
-            } else {
-                alert("✅ Lead Form will open here."); // Next step: lead form link
-            }
-        }
-
-        // SIMPLE KYC SUBMISSION
-        document.getElementById('kycForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const pan = document.getElementById('panInput').value.toUpperCase();
-            const aadhaar = document.getElementById('aadhaarInput').value;
-            const btn = document.getElementById('submitBtn');
-            
-            btn.innerHTML = 'Submitting... <i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
-            // Save to Supabase as 'submitted'
-            const { error } = await supabaseClient
-                .from('dsa_partners')
-                .update({ pan_number: pan, aadhaar_number: aadhaar, kyc_status: 'submitted' })
-                .eq('email', currentUserEmail);
-
-            if (error) {
-                alert("❌ Error: " + error.message);
-                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
-                btn.disabled = false;
-            } else {
-                alert("✅ Details Submitted Successfully! Pending Admin Approval.");
-                currentKycStatus = 'submitted';
-                closeKYCModal();
-                document.getElementById('kycAlertBox').style.display = 'none'; 
-                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
-                btn.disabled = false;
-            }
-        });
-    <!-- ADD NEW LEAD MODAL (Dynamic Form) -->
+    <!-- ADD NEW LEAD MODAL (Dynamic Form) - [FIXED LOCATION] -->
     <div id="leadModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeLeadModal()">&times;</span>
@@ -281,46 +206,24 @@
                 <div id="documentSection" style="display: none; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1;">
                     <h4 style="margin-bottom: 15px; color: var(--primary-dark); font-size: 0.95rem;">Required Documents <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Upload PDF/JPG - Max 5MB)</span></h4>
                     
-                    <!-- Common Docs (Always show if loan selected) -->
                     <div class="input-group">
                         <label>PAN Card & Aadhaar (Merged)</label>
                         <input type="file" id="docKyc" accept=".pdf, .jpg, .jpeg, .png">
                     </div>
 
-                    <!-- Personal Loan Docs -->
                     <div id="plDocs" style="display: none;">
-                        <div class="input-group">
-                            <label>Last 3 Months Salary Slips</label>
-                            <input type="file" id="docIncomePL" accept=".pdf">
-                        </div>
-                        <div class="input-group">
-                            <label>Last 6 Months Bank Statement</label>
-                            <input type="file" id="docBankPL" accept=".pdf">
-                        </div>
+                        <div class="input-group"><label>Last 3 Months Salary Slips</label><input type="file" id="docIncomePL" accept=".pdf"></div>
+                        <div class="input-group"><label>Last 6 Months Bank Statement</label><input type="file" id="docBankPL" accept=".pdf"></div>
                     </div>
 
-                    <!-- Business Loan Docs -->
                     <div id="blDocs" style="display: none;">
-                        <div class="input-group">
-                            <label>Last 1 Year ITR & GST Certificate</label>
-                            <input type="file" id="docIncomeBL" accept=".pdf">
-                        </div>
-                        <div class="input-group">
-                            <label>Current Account Statement (12 Months)</label>
-                            <input type="file" id="docBankBL" accept=".pdf">
-                        </div>
+                        <div class="input-group"><label>Last 1 Year ITR & GST Certificate</label><input type="file" id="docIncomeBL" accept=".pdf"></div>
+                        <div class="input-group"><label>Current Account Statement (12 Months)</label><input type="file" id="docBankBL" accept=".pdf"></div>
                     </div>
 
-                    <!-- Property Loan Docs (Home Loan / LAP) -->
                     <div id="propDocs" style="display: none;">
-                        <div class="input-group">
-                            <label>Income Proof (ITR / Salary Slip)</label>
-                            <input type="file" id="docIncomeProp" accept=".pdf">
-                        </div>
-                        <div class="input-group">
-                            <label>Property Documents (Registry/Chain)</label>
-                            <input type="file" id="docProperty" accept=".pdf">
-                        </div>
+                        <div class="input-group"><label>Income Proof (ITR / Salary Slip)</label><input type="file" id="docIncomeProp" accept=".pdf"></div>
+                        <div class="input-group"><label>Property Documents (Registry/Chain)</label><input type="file" id="docProperty" accept=".pdf"></div>
                     </div>
                 </div>
 
@@ -336,6 +239,153 @@
             </form>
         </div>
     </div>
+
+    <!-- Supabase JavaScript [ALL JS MOVED HERE] -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUserEmail = "";
+        let currentKycStatus = "pending";
+
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
+        
+        // KYC Modal Controls
+        function openKYCModal() { document.getElementById('kycModal').style.display = 'flex'; }
+        function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
+        
+        // Lead Modal Controls
+        function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
+        function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
+
+        async function checkAuthAndLoadData() {
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            currentUserEmail = session.user.email;
+            
+            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
+
+            if (userData) {
+                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
+                document.getElementById('userMobile').innerText = userData.mobile_number;
+                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
+                currentKycStatus = userData.kyc_status;
+                
+                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                    document.getElementById('kycAlertBox').style.display = 'none';
+                }
+            }
+        }
+
+        // Updated KYC Check for Lead Form
+        function checkKycForLead() {
+            if(currentKycStatus === 'pending') {
+                alert("❌ You cannot add leads yet. Please submit your KYC details first!");
+                openKYCModal();
+            } else if (currentKycStatus === 'submitted') {
+                alert("⏳ Your KYC is pending approval from Admin. Please wait.");
+            } else if (currentKycStatus === 'approved') {
+                openLeadModal(); // KYC Approve hone par Lead Modal Khulega
+            }
+        }
+
+        // Show Dynamic Documents Based on Loan Type
+        function showDocumentFields() {
+            const loanType = document.getElementById('loanType').value;
+            const docSection = document.getElementById('documentSection');
+            const plDocs = document.getElementById('plDocs');
+            const blDocs = document.getElementById('blDocs');
+            const propDocs = document.getElementById('propDocs');
+
+            plDocs.style.display = 'none';
+            blDocs.style.display = 'none';
+            propDocs.style.display = 'none';
+
+            if(loanType === "") {
+                docSection.style.display = 'none';
+            } else {
+                docSection.style.display = 'block'; 
+                
+                if(loanType === 'Personal Loan') {
+                    plDocs.style.display = 'block';
+                } else if(loanType === 'Business Loan') {
+                    blDocs.style.display = 'block';
+                } else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') {
+                    propDocs.style.display = 'block';
+                }
+            }
+        }
+
+        // Submit Lead Logic
+        async function submitLead(statusType) {
+            const cName = document.getElementById('custName').value;
+            const cMobile = document.getElementById('custMobile').value;
+            const lType = document.getElementById('loanType').value;
+            const lAmt = document.getElementById('loanAmt').value;
+
+            if(!cName || !cMobile || !lType || !lAmt) {
+                alert("⚠️ Please fill all mandatory fields (Name, Mobile, Loan Type, Amount).");
+                return;
+            }
+
+            const { error } = await supabaseClient
+                .from('leads')
+                .insert([
+                    { 
+                        customer_name: cName, 
+                        customer_mobile: cMobile, 
+                        loan_type: lType, 
+                        loan_amount: lAmt, 
+                        partner_email: currentUserEmail, 
+                        lead_status: statusType 
+                    }
+                ]);
+
+            if (error) {
+                alert("❌ Error saving lead: " + error.message);
+            } else {
+                if(statusType === 'Draft') {
+                    alert("💾 File Saved as Draft! You can upload documents later.");
+                } else {
+                    alert("✅ File Submitted Successfully! Sent to Admin for review.");
+                }
+                document.getElementById('leadForm').reset();
+                closeLeadModal();
+                showDocumentFields(); 
+            }
+        }
+
+        // KYC Submission Logic
+        document.getElementById('kycForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pan = document.getElementById('panInput').value.toUpperCase();
+            const aadhaar = document.getElementById('aadhaarInput').value;
+            const btn = document.getElementById('submitBtn');
+            
+            btn.innerHTML = 'Submitting... <i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const { error } = await supabaseClient
+                .from('dsa_partners')
+                .update({ pan_number: pan, aadhaar_number: aadhaar, kyc_status: 'submitted' })
+                .eq('email', currentUserEmail);
+
+            if (error) {
+                alert("❌ Error: " + error.message);
+                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            } else {
+                alert("✅ Details Submitted Successfully! Pending Admin Approval.");
+                currentKycStatus = 'submitted';
+                closeKYCModal();
+                document.getElementById('kycAlertBox').style.display = 'none'; 
+                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
+                btn.disabled = false;
+            }
+        });
 
         async function logoutUser() {
             await supabaseClient.auth.signOut();
