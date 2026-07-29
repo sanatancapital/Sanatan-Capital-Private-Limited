@@ -293,6 +293,16 @@
         }
         function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
 
+        // फाइल साइज़ चेक करने का लॉजिक (2MB = 2 * 1024 * 1024 bytes)
+const maxSize = 2 * 1024 * 1024; 
+
+if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxSize) {
+    alert("⚠️ Error: कोई एक फाइल 2MB से बड़ी है! कृपया फाइल का साइज़ कम करके दोबारा अपलोड करें।");
+    btn.innerHTML = 'Submit Documents <i class="fas fa-upload"></i>';
+    btn.disabled = false;
+    return; // इसके आगे कोड नहीं बढ़ेगा, Supabase में बड़ी फाइल नहीं जाएगी
+}
+
         // KYC फॉर्म और फाइल अपलोड
         document.getElementById('kycForm').addEventListener('submit', async (e) => {
             e.preventDefault();
