@@ -277,12 +277,42 @@
                 }
             }
         }
+    <!-- JAVASCRIPT (ALL LOGIC HERE) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUserEmail = "";
+        let currentKycStatus = "pending";
+
+        // पेज लोड होते ही डेटा लाना
+        async function checkAuthAndLoadData() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
+
+            currentUserEmail = session.user.email;
+            
+            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
+
+            if (userData) {
+                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
+                document.getElementById('userMobile').innerText = userData.mobile_number;
+                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
+                currentKycStatus = userData.kyc_status;
+                
+                // अगर KYC पेंडिंग नहीं है, तो लाल अलर्ट छुपा दो
+                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                    document.getElementById('kycAlertBox').style.display = 'none';
+                }
+            }
+        }
 
         // KYC MODAL ओपन/क्लोज
         function openKYCModal() { 
             document.getElementById('kycModal').style.display = 'flex'; 
             
-            // वीडियो वाली प्रॉब्लम का फिक्स: अगर जमा है, तो फॉर्म छुपाओ और सक्सेस मैसेज दिखाओ
             if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
                 document.getElementById('kycForm').style.display = 'none';
                 document.getElementById('kycAlreadySubmittedMsg').style.display = 'block';
@@ -292,16 +322,6 @@
             }
         }
         function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
-
-        // फाइल साइज़ चेक करने का लॉजिक (2MB = 2 * 1024 * 1024 bytes)
-const maxSize = 2 * 1024 * 1024; 
-
-if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxSize) {
-    alert("⚠️ Error: कोई एक फाइल 2MB से बड़ी है! कृपया फाइल का साइज़ कम करके दोबारा अपलोड करें।");
-    btn.innerHTML = 'Submit Documents <i class="fas fa-upload"></i>';
-    btn.disabled = false;
-    return; // इसके आगे कोड नहीं बढ़ेगा, Supabase में बड़ी फाइल नहीं जाएगी
-}
 
         // KYC फॉर्म और फाइल अपलोड
         document.getElementById('kycForm').addEventListener('submit', async (e) => {
@@ -313,6 +333,13 @@ if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxS
             const aadhaarFile = document.getElementById('aadhaarFile').files[0];
             const bankFile = document.getElementById('bankFile').files[0];
             const btn = document.getElementById('submitBtn');
+
+            // ✅ सही जगह: फाइल साइज़ चेक करने का लॉजिक (2MB = 2 * 1024 * 1024 bytes)
+            const maxSize = 2 * 1024 * 1024; 
+            if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxSize) {
+                alert("⚠️ Error: कोई एक फाइल 2MB से बड़ी है! कृपया फाइल का साइज़ कम करके दोबारा अपलोड करें।");
+                return; // इसके आगे कोड नहीं बढ़ेगा
+            }
             
             btn.innerHTML = 'Uploading... <i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
@@ -384,5 +411,7 @@ if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxS
 
         checkAuthAndLoadData();
     </script>
+
+
 </body>
 </html>
