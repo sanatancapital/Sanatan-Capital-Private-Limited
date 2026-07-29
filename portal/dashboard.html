@@ -104,7 +104,7 @@
 
     <div class="main-content">
         <header class="top-header">
-            <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+            <button class="menu-toggle" onclick="toggleMenu()" style="display:none;"><i class="fas fa-bars"></i></button>
             <div class="welcome-text">
                 <h2 id="userName">Loading... ⌛</h2>
                 <p>Welcome to your Sanatan Capital Dashboard</p>
@@ -118,7 +118,7 @@
         <div class="kyc-alert" id="kycAlertBox">
             <div>
                 <h4><i class="fas fa-exclamation-triangle"></i> Action Required: Complete Your KYC</h4>
-                <p>Your account is restricted. Please submit your PAN and Aadhaar details to start adding leads.</p>
+                <p>Your account is restricted. Please submit your documents to start adding leads.</p>
             </div>
             <button class="btn-kyc" onclick="openKYCModal()">Submit Details</button>
         </div>
@@ -143,30 +143,21 @@
         </div>
     </div>
 
-    <!-- STRICT VALIDATED KYC MODAL -->
+    <!-- KYC MODAL (Upload & Alert Logic) -->
     <div id="kycModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
             <span class="close-btn" onclick="closeKYCModal()">&times;</span>
             <h3>Submit KYC Details</h3>
-            <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details exactly as per your documents.</p>
             
-            <form id="kycForm">
-    <!-- STRICT VALIDATED KYC MODAL WITH FILE UPLOADS -->
-    <div id="kycModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeKYCModal()">&times;</span>
-            <h3>Submit KYC Details</h3>
-            <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details and upload clear documents.</p>
-            
-            <!-- यह मैसेज तब दिखेगा जब KYC पहले से जमा हो -->
-            <div id="kycAlreadySubmittedMsg" style="display: none; text-align: center; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; color: #166534;">
+            <div id="kycAlreadySubmittedMsg" style="display: none; text-align: center; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; color: #166534; margin-top:15px;">
                 <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
                 <h4>Details Already Submitted!</h4>
-                <p style="font-size: 0.9rem; margin-top: 5px;">Your KYC documents are safely stored in our system.</p>
+                <p style="font-size: 0.9rem; margin-top: 5px;">Your KYC documents are safely stored in our system. Waiting for Admin approval.</p>
             </div>
 
-            <!-- KYC फॉर्म -->
             <form id="kycForm">
+                <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details and upload clear documents.</p>
+                
                 <div class="input-group">
                     <label>PAN Card Number <span style="color: red;">*</span></label>
                     <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" minlength="10" maxlength="10" oninput="this.value = this.value.toUpperCase();" required>
@@ -197,8 +188,7 @@
         </div>
     </div>
 
-
-    <!-- STRICT VALIDATED LEAD MODAL -->
+    <!-- LEAD MODAL -->
     <div id="leadModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeLeadModal()">&times;</span>
@@ -209,247 +199,180 @@
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Customer Name <span style="color: red;">*</span></label>
-                        <input type="text" id="custName" placeholder="As per PAN Card" 
-                               oninput="this.setCustomValidity('')" 
-                               oninvalid="this.setCustomValidity('कृपया कस्टमर का नाम लिखें')" required>
+                        <input type="text" id="custName" required>
                     </div>
                     <div class="input-group">
                         <label>Customer Mobile <span style="color: red;">*</span></label>
-                        <input type="text" id="custMobile" placeholder="10 Digit Number" 
-                               pattern="\d{10}" minlength="10" maxlength="10" 
-                               oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.setCustomValidity('')" 
-                               oninvalid="this.setCustomValidity('कस्टमर का मोबाइल नंबर 10 अंकों का ही होना चाहिए')" required>
+                        <input type="text" id="custMobile" pattern="\d{10}" minlength="10" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                     </div>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Loan Category <span style="color: red;">*</span></label>
-                        <select id="loanType" required onchange="showDocumentFields()" 
-                                oninput="this.setCustomValidity('')" 
-                                oninvalid="this.setCustomValidity('कृपया लोन की केटेगरी चुनें')" 
-                                style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 1rem;">
+                        <select id="loanType" required onchange="showDocumentFields()" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
                             <option value="">-- Select Loan Type --</option>
-                            <option value="Personal Loan">Personal Loan (Unsecured)</option>
-                            <option value="Business Loan">Business Loan (Unsecured)</option>
-                            <option value="Home Loan">Home Loan (Secured)</option>
-                            <option value="Loan Against Property">LAP (Secured)</option>
+                            <option value="Personal Loan">Personal Loan</option>
+                            <option value="Business Loan">Business Loan</option>
+                            <option value="Home Loan">Home Loan</option>
+                            <option value="Loan Against Property">LAP</option>
                         </select>
                     </div>
                     <div class="input-group">
                         <label>Loan Amount Needed <span style="color: red;">*</span></label>
-                        <input type="number" id="loanAmt" placeholder="Ex: 500000" min="1000" 
-                               oninput="this.setCustomValidity('')" 
-                               oninvalid="this.setCustomValidity('कृपया लोन अमाउंट दर्ज करें')" required>
+                        <input type="number" id="loanAmt" min="1000" required>
                     </div>
                 </div>
 
-                <!-- DYNAMIC DOCUMENT UPLOAD SECTION -->
                 <div id="documentSection" style="display: none; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1;">
-                    <h4 style="margin-bottom: 15px; color: var(--primary-dark); font-size: 0.95rem;">Required Documents <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">(Upload PDF/JPG - Max 5MB)</span></h4>
-                    
-                    <div class="input-group">
-                        <label>PAN Card & Aadhaar (Merged)</label>
-                        <input type="file" id="docKyc" accept=".pdf, .jpg, .jpeg, .png">
-                    </div>
-
+                    <h4 style="margin-bottom: 15px;">Required Documents</h4>
+                    <div class="input-group"><label>PAN Card & Aadhaar (Merged)</label><input type="file" id="docKyc" accept=".pdf, .jpg"></div>
                     <div id="plDocs" style="display: none;">
-                        <div class="input-group"><label>Last 3 Months Salary Slips</label><input type="file" id="docIncomePL" accept=".pdf"></div>
-                        <div class="input-group"><label>Last 6 Months Bank Statement</label><input type="file" id="docBankPL" accept=".pdf"></div>
+                        <div class="input-group"><label>Last 3 Months Salary Slips</label><input type="file" accept=".pdf"></div>
                     </div>
-
                     <div id="blDocs" style="display: none;">
-                        <div class="input-group"><label>Last 1 Year ITR & GST Certificate</label><input type="file" id="docIncomeBL" accept=".pdf"></div>
-                        <div class="input-group"><label>Current Account Statement (12 Months)</label><input type="file" id="docBankBL" accept=".pdf"></div>
+                        <div class="input-group"><label>Last 1 Year ITR & GST</label><input type="file" accept=".pdf"></div>
                     </div>
-
                     <div id="propDocs" style="display: none;">
-                        <div class="input-group"><label>Income Proof (ITR / Salary Slip)</label><input type="file" id="docIncomeProp" accept=".pdf"></div>
-                        <div class="input-group"><label>Property Documents (Registry/Chain)</label><input type="file" id="docProperty" accept=".pdf"></div>
+                        <div class="input-group"><label>Property Documents</label><input type="file" accept=".pdf"></div>
                     </div>
                 </div>
 
-                <!-- DUAL ACTION BUTTONS -->
                 <div style="display: flex; gap: 15px;">
-                    <button type="button" onclick="submitLead('Draft')" style="flex: 1; padding: 12px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        <i class="fas fa-save"></i> Save as Draft
-                    </button>
-                    <button type="button" onclick="submitLead('Pending')" style="flex: 1; padding: 12px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-                        Final Submit <i class="fas fa-paper-plane"></i>
-                    </button>
+                    <button type="button" onclick="submitLead('Draft')" style="flex: 1; padding: 12px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Save as Draft</button>
+                    <button type="button" onclick="submitLead('Pending')" style="flex: 1; padding: 12px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; cursor: pointer;">Final Submit</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- यह कोड dashboard.html में सबसे नीचे </body> के ठीक ऊपर डालना है -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-    const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- JAVASCRIPT (ALL LOGIC HERE) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentUserEmail = "";
-    let currentKycStatus = "pending";
+        let currentUserEmail = "";
+        let currentKycStatus = "pending";
 
-    function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
+        // पेज लोड होते ही डेटा लाना
+        async function checkAuthAndLoadData() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) { window.location.href = 'index.html'; return; }
 
-    async function checkAuthAndLoadData() {
-        const { data: { session } } = await supabaseClient.auth.getSession();
-        if (!session) { window.location.href = 'index.html'; return; }
-
-        currentUserEmail = session.user.email;
-        
-        const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
-
-        if (userData) {
-            document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
-            document.getElementById('userMobile').innerText = userData.mobile_number;
-            document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
-            currentKycStatus = userData.kyc_status;
+            currentUserEmail = session.user.email;
             
-            if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
-                document.getElementById('kycAlertBox').style.display = 'none';
+            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
+
+            if (userData) {
+                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
+                document.getElementById('userMobile').innerText = userData.mobile_number;
+                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
+                currentKycStatus = userData.kyc_status;
+                
+                // अगर KYC पेंडिंग नहीं है, तो लाल अलर्ट छुपा दो
+                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                    document.getElementById('kycAlertBox').style.display = 'none';
+                }
             }
         }
-    }
 
-    /* --- KYC MODAL & UPLOAD LOGIC --- */
-    function openKYCModal() { 
-        document.getElementById('kycModal').style.display = 'flex'; 
-        if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
-            document.getElementById('kycForm').style.display = 'none';
-            document.getElementById('kycAlreadySubmittedMsg').style.display = 'block';
-        } else {
-            document.getElementById('kycForm').style.display = 'block';
-            document.getElementById('kycAlreadySubmittedMsg').style.display = 'none';
+        // KYC MODAL ओपन/क्लोज
+        function openKYCModal() { 
+            document.getElementById('kycModal').style.display = 'flex'; 
+            
+            // वीडियो वाली प्रॉब्लम का फिक्स: अगर जमा है, तो फॉर्म छुपाओ और सक्सेस मैसेज दिखाओ
+            if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                document.getElementById('kycForm').style.display = 'none';
+                document.getElementById('kycAlreadySubmittedMsg').style.display = 'block';
+            } else {
+                document.getElementById('kycForm').style.display = 'block';
+                document.getElementById('kycAlreadySubmittedMsg').style.display = 'none';
+            }
         }
-    }
-    function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
+        function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
 
-    document.getElementById('kycForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const pan = document.getElementById('panInput').value.toUpperCase();
-        const aadhaar = document.getElementById('aadhaarInput').value;
-        const panFile = document.getElementById('panFile').files[0];
-        const aadhaarFile = document.getElementById('aadhaarFile').files[0];
-        const bankFile = document.getElementById('bankFile').files[0];
-        const btn = document.getElementById('submitBtn');
-        
-        btn.innerHTML = 'Uploading Documents... <i class="fas fa-spinner fa-spin"></i>';
-        btn.disabled = true;
+        // KYC फॉर्म और फाइल अपलोड
+        document.getElementById('kycForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const pan = document.getElementById('panInput').value.toUpperCase();
+            const aadhaar = document.getElementById('aadhaarInput').value;
+            const panFile = document.getElementById('panFile').files[0];
+            const aadhaarFile = document.getElementById('aadhaarFile').files[0];
+            const bankFile = document.getElementById('bankFile').files[0];
+            const btn = document.getElementById('submitBtn');
+            
+            btn.innerHTML = 'Uploading... <i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
 
-        try {
-            const uploadFile = async (file, fileType) => {
-                if (!file) return null;
-                const fileExt = file.name.split('.').pop();
-                const fileName = `${currentUserEmail.split('@')[0]}_${fileType}_${Date.now()}.${fileExt}`;
-                const { data, error } = await supabaseClient.storage.from('dsa_documents').upload(fileName, file);
-                if (error) throw error;
-                const { data: urlData } = supabaseClient.storage.from('dsa_documents').getPublicUrl(fileName);
-                return urlData.publicUrl;
-            };
+            try {
+                // Supabase Storage में अपलोड
+                const uploadFile = async (file, fileType) => {
+                    if (!file) return null;
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${currentUserEmail.split('@')[0]}_${fileType}_${Date.now()}.${fileExt}`;
+                    const { error } = await supabaseClient.storage.from('dsa_documents').upload(fileName, file);
+                    if (error) throw error;
+                    const { data: urlData } = supabaseClient.storage.from('dsa_documents').getPublicUrl(fileName);
+                    return urlData.publicUrl;
+                };
 
-            const panUrl = await uploadFile(panFile, 'pan');
-            const aadhaarUrl = await uploadFile(aadhaarFile, 'aadhaar');
-            const bankUrl = await uploadFile(bankFile, 'bank');
+                const panUrl = await uploadFile(panFile, 'pan');
+                const aadhaarUrl = await uploadFile(aadhaarFile, 'aadhaar');
+                const bankUrl = await uploadFile(bankFile, 'bank');
 
-            const { error: dbError } = await supabaseClient
-                .from('dsa_partners')
-                .update({ 
-                    pan_number: pan, 
-                    aadhaar_number: aadhaar, 
-                    pan_doc: panUrl,
-                    aadhaar_doc: aadhaarUrl,
-                    bank_doc: bankUrl,
-                    kyc_status: 'submitted' 
-                })
-                .eq('email', currentUserEmail);
+                // Database अपडेट
+                const { error: dbError } = await supabaseClient
+                    .from('dsa_partners')
+                    .update({ 
+                        pan_number: pan, aadhaar_number: aadhaar, 
+                        pan_doc: panUrl, aadhaar_doc: aadhaarUrl, bank_doc: bankUrl,
+                        kyc_status: 'submitted' 
+                    })
+                    .eq('email', currentUserEmail);
 
-            if (dbError) throw dbError;
+                if (dbError) throw dbError;
 
-            alert("✅ All Documents & Details Submitted Successfully!");
-            currentKycStatus = 'submitted';
-            closeKYCModal();
-            document.getElementById('kycAlertBox').style.display = 'none'; 
+                alert("✅ Documents Submitted Successfully!");
+                currentKycStatus = 'submitted';
+                closeKYCModal();
+                document.getElementById('kycAlertBox').style.display = 'none'; 
 
-        } catch (error) {
-            alert("❌ Error: " + error.message);
-        } finally {
-            btn.innerHTML = 'Submit Documents <i class="fas fa-upload"></i>';
-            btn.disabled = false;
+            } catch (error) {
+                alert("❌ Error: " + error.message);
+            } finally {
+                btn.innerHTML = 'Submit Documents <i class="fas fa-upload"></i>';
+                btn.disabled = false;
+            }
+        });
+
+        // LEAD MODAL और बाकी फंक्शन
+        function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
+        function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
+
+        function checkKycForLead() {
+            if(currentKycStatus === 'pending') { alert("❌ Please submit KYC first!"); openKYCModal(); } 
+            else if (currentKycStatus === 'submitted') { alert("⏳ Your KYC is pending admin approval."); } 
+            else if (currentKycStatus === 'approved') { openLeadModal(); }
         }
-    });
 
-    /* --- LEAD MODAL LOGIC --- */
-    function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
-    function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
-
-    function checkKycForLead() {
-        if(currentKycStatus === 'pending') {
-            alert("❌ You cannot add leads yet. Please submit your KYC details first!");
-            openKYCModal();
-        } else if (currentKycStatus === 'submitted') {
-            alert("⏳ Your KYC is pending approval from Admin. Please wait.");
-        } else if (currentKycStatus === 'approved') {
-            openLeadModal(); 
+        function showDocumentFields() {
+            const lType = document.getElementById('loanType').value;
+            const ds = document.getElementById('documentSection');
+            document.getElementById('plDocs').style.display = lType === 'Personal Loan' ? 'block' : 'none';
+            document.getElementById('blDocs').style.display = lType === 'Business Loan' ? 'block' : 'none';
+            document.getElementById('propDocs').style.display = (lType === 'Home Loan' || lType === 'Loan Against Property') ? 'block' : 'none';
+            ds.style.display = lType === "" ? 'none' : 'block';
         }
-    }
 
-    function showDocumentFields() {
-        const loanType = document.getElementById('loanType').value;
-        const docSection = document.getElementById('documentSection');
-        const plDocs = document.getElementById('plDocs');
-        const blDocs = document.getElementById('blDocs');
-        const propDocs = document.getElementById('propDocs');
-
-        plDocs.style.display = 'none';
-        blDocs.style.display = 'none';
-        propDocs.style.display = 'none';
-
-        if(loanType === "") {
-            docSection.style.display = 'none';
-        } else {
-            docSection.style.display = 'block'; 
-            if(loanType === 'Personal Loan') { plDocs.style.display = 'block'; } 
-            else if(loanType === 'Business Loan') { blDocs.style.display = 'block'; } 
-            else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') { propDocs.style.display = 'block'; }
+        async function logoutUser() {
+            await supabaseClient.auth.signOut();
+            window.location.href = 'index.html';
         }
-    }
 
-    async function submitLead(statusType) {
-        const form = document.getElementById('leadForm');
-        if (!form.reportValidity()) return;
-
-        const cName = document.getElementById('custName').value;
-        const cMobile = document.getElementById('custMobile').value;
-        const lType = document.getElementById('loanType').value;
-        const lAmt = document.getElementById('loanAmt').value;
-
-        const { error } = await supabaseClient.from('leads').insert([{ 
-            customer_name: cName, customer_mobile: cMobile, loan_type: lType, 
-            loan_amount: lAmt, partner_email: currentUserEmail, lead_status: statusType 
-        }]);
-
-        if (error) {
-            alert("❌ Error saving lead: " + error.message);
-        } else {
-            alert(statusType === 'Draft' ? "💾 File Saved as Draft!" : "✅ File Submitted Successfully!");
-            document.getElementById('leadForm').reset();
-            closeLeadModal();
-            showDocumentFields(); 
-        }
-    }
-
-    async function logoutUser() {
-        await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
-    }
-
-    checkAuthAndLoadData();
-</script>
-
-
+        checkAuthAndLoadData();
+    </script>
 </body>
 </html>
