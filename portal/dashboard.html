@@ -41,13 +41,20 @@
         .user-profile { display: flex; align-items: center; gap: 15px; background: var(--white); padding: 8px 20px; border-radius: 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); font-weight: 600;}
         .user-profile img { width: 40px; height: 40px; border-radius: 50%; }
 
-        /* KYC Alert */
+        /* Alerts - Action Required & Pending */
         .kyc-alert {
-            background: #fff1f2; border: 1px solid #fecdd3; border-left: 5px solid #e11d48;
             padding: 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
         }
-        .kyc-alert div h4 { color: #e11d48; margin-bottom: 5px; }
-        .kyc-alert div p { color: #881337; font-size: 0.9rem; }
+        /* Red Alert - Needs Action */
+        .kyc-alert.danger { background: #fff1f2; border: 1px solid #fecdd3; border-left: 5px solid #e11d48; }
+        .kyc-alert.danger h4 { color: #e11d48; margin-bottom: 5px; }
+        .kyc-alert.danger p { color: #881337; font-size: 0.9rem; }
+        
+        /* Yellow Alert - Pending Status */
+        .kyc-alert.pending { background: #fffbeb; border: 1px solid #fde68a; border-left: 5px solid #d97706; }
+        .kyc-alert.pending h4 { color: #d97706; margin-bottom: 5px; }
+        .kyc-alert.pending p { color: #92400e; font-size: 0.9rem; }
+
         .btn-kyc { background: #e11d48; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s;}
         .btn-kyc:hover { background: #be123c; }
 
@@ -69,9 +76,13 @@
         .close-btn { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: var(--text-muted); }
         .modal-content h3 { margin-bottom: 10px; color: var(--primary-dark); }
         .input-group { margin-bottom: 15px; text-align: left; }
+        
+        /* New label design with Max Size tag */
         .input-group label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; color: var(--primary-dark); }
+        .file-hint { font-size: 0.75rem; color: #d97706; font-weight: bold; background: #fef3c7; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+
         .input-group input, .input-group select { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
-        .input-group input:focus, .input-group select:focus { border-color: var(--primary-blue); }
+        .input-group input[type="file"] { padding: 10px; background: #f8fafc; font-size: 0.9rem;}
         
         .submit-btn { width: 100%; padding: 14px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s;}
         .submit-btn:hover { background: #1e40af; }
@@ -115,12 +126,22 @@
             </div>
         </header>
 
-        <div class="kyc-alert" id="kycAlertBox">
+        <!-- RED ALERT: When KYC is NOT DONE -->
+        <div class="kyc-alert danger" id="kycAlertBox" style="display: none;">
             <div>
                 <h4><i class="fas fa-exclamation-triangle"></i> Action Required: Complete Your KYC</h4>
                 <p>Your account is restricted. Please submit your documents to start adding leads.</p>
             </div>
             <button class="btn-kyc" onclick="openKYCModal()">Submit Details</button>
+        </div>
+
+        <!-- YELLOW ALERT: When KYC is SUBMITTED but not approved -->
+        <div class="kyc-alert pending" id="kycPendingBox" style="display: none;">
+            <div>
+                <h4><i class="fas fa-clock"></i> KYC Status: Approval Pending</h4>
+                <p>Your documents have been successfully submitted and are currently under review by our Admin team.</p>
+            </div>
+            <button class="btn-kyc" style="background:#d97706; cursor: default;" disabled>Under Review</button>
         </div>
 
         <div class="stats-grid">
@@ -143,7 +164,7 @@
         </div>
     </div>
 
-    <!-- KYC MODAL (Upload & Alert Logic) -->
+    <!-- KYC MODAL -->
     <div id="kycModal" class="modal">
         <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
             <span class="close-btn" onclick="closeKYCModal()">&times;</span>
@@ -156,15 +177,16 @@
             </div>
 
             <form id="kycForm">
-                <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details and upload clear documents.</p>
+                <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please upload clear documents. Files above 400KB will be rejected automatically.</p>
                 
                 <div class="input-group">
                     <label>PAN Card Number <span style="color: red;">*</span></label>
                     <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" minlength="10" maxlength="10" oninput="this.value = this.value.toUpperCase();" required>
                 </div>
                 <div class="input-group">
-                    <label>Upload PAN Card (PDF/JPG) <span style="color: red;">*</span></label>
-                    <input type="file" id="panFile" accept=".pdf, .jpg, .jpeg, .png" required>
+                    <label>Upload PAN Card <span style="color: red;">*</span> <span class="file-hint">Max 400KB</span></label>
+                    <!-- onchange function turant size check karega -->
+                    <input type="file" id="panFile" accept=".pdf, .jpg, .jpeg, .png" onchange="validateFileSize(this)" required>
                 </div>
 
                 <div class="input-group" style="margin-top: 15px;">
@@ -172,13 +194,13 @@
                     <input type="text" id="aadhaarInput" placeholder="12 Digit Number" pattern="\d{12}" minlength="12" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
                 </div>
                 <div class="input-group">
-                    <label>Upload Aadhaar (Front & Back) <span style="color: red;">*</span></label>
-                    <input type="file" id="aadhaarFile" accept=".pdf, .jpg, .jpeg, .png" required>
+                    <label>Upload Aadhaar (Merged) <span style="color: red;">*</span> <span class="file-hint">Max 400KB</span></label>
+                    <input type="file" id="aadhaarFile" accept=".pdf, .jpg, .jpeg, .png" onchange="validateFileSize(this)" required>
                 </div>
 
                 <div class="input-group" style="margin-top: 15px;">
-                    <label>Bank Proof (Passbook / Cancelled Cheque) <span style="color: red;">*</span></label>
-                    <input type="file" id="bankFile" accept=".pdf, .jpg, .jpeg, .png" required>
+                    <label>Bank Passbook/Cheque <span style="color: red;">*</span> <span class="file-hint">Max 400KB</span></label>
+                    <input type="file" id="bankFile" accept=".pdf, .jpg, .jpeg, .png" onchange="validateFileSize(this)" required>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitBtn" style="margin-top: 15px;">
@@ -188,25 +210,17 @@
         </div>
     </div>
 
-    <!-- LEAD MODAL -->
+    <!-- LEAD MODAL (Same as before) -->
     <div id="leadModal" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <span class="close-btn" onclick="closeLeadModal()">&times;</span>
             <h3><i class="fas fa-file-signature"></i> Log New File (Lead)</h3>
             <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;">Enter customer details and upload available documents.</p>
-            
             <form id="leadForm">
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="input-group">
-                        <label>Customer Name <span style="color: red;">*</span></label>
-                        <input type="text" id="custName" required>
-                    </div>
-                    <div class="input-group">
-                        <label>Customer Mobile <span style="color: red;">*</span></label>
-                        <input type="text" id="custMobile" pattern="\d{10}" minlength="10" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
-                    </div>
+                    <div class="input-group"><label>Customer Name <span style="color: red;">*</span></label><input type="text" id="custName" required></div>
+                    <div class="input-group"><label>Customer Mobile <span style="color: red;">*</span></label><input type="text" id="custMobile" pattern="\d{10}" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required></div>
                 </div>
-
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="input-group">
                         <label>Loan Category <span style="color: red;">*</span></label>
@@ -218,36 +232,24 @@
                             <option value="Loan Against Property">LAP</option>
                         </select>
                     </div>
-                    <div class="input-group">
-                        <label>Loan Amount Needed <span style="color: red;">*</span></label>
-                        <input type="number" id="loanAmt" min="1000" required>
-                    </div>
+                    <div class="input-group"><label>Loan Amount Needed <span style="color: red;">*</span></label><input type="number" id="loanAmt" min="1000" required></div>
                 </div>
-
                 <div id="documentSection" style="display: none; background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px dashed #cbd5e1;">
                     <h4 style="margin-bottom: 15px;">Required Documents</h4>
-                    <div class="input-group"><label>PAN Card & Aadhaar (Merged)</label><input type="file" id="docKyc" accept=".pdf, .jpg"></div>
-                    <div id="plDocs" style="display: none;">
-                        <div class="input-group"><label>Last 3 Months Salary Slips</label><input type="file" accept=".pdf"></div>
-                    </div>
-                    <div id="blDocs" style="display: none;">
-                        <div class="input-group"><label>Last 1 Year ITR & GST</label><input type="file" accept=".pdf"></div>
-                    </div>
-                    <div id="propDocs" style="display: none;">
-                        <div class="input-group"><label>Property Documents</label><input type="file" accept=".pdf"></div>
-                    </div>
+                    <div class="input-group"><label>PAN Card & Aadhaar</label><input type="file" id="docKyc" accept=".pdf, .jpg"></div>
+                    <div id="plDocs" style="display: none;"><div class="input-group"><label>Salary Slips</label><input type="file" accept=".pdf"></div></div>
+                    <div id="blDocs" style="display: none;"><div class="input-group"><label>ITR & GST</label><input type="file" accept=".pdf"></div></div>
+                    <div id="propDocs" style="display: none;"><div class="input-group"><label>Property Docs</label><input type="file" accept=".pdf"></div></div>
                 </div>
-
                 <div style="display: flex; gap: 15px;">
-                    <button type="button" onclick="submitLead('Draft')" style="flex: 1; padding: 12px; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Save as Draft</button>
+                    <button type="button" onclick="submitLead('Draft')" style="flex: 1; padding: 12px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;">Save as Draft</button>
                     <button type="button" onclick="submitLead('Pending')" style="flex: 1; padding: 12px; background: var(--primary-blue); color: white; border: none; border-radius: 8px; cursor: pointer;">Final Submit</button>
                 </div>
             </form>
         </div>
     </div>
 
-    
-    <!-- JAVASCRIPT (ALL LOGIC HERE) -->
+    <!-- JAVASCRIPT LOGIC -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
@@ -257,7 +259,18 @@
         let currentUserEmail = "";
         let currentKycStatus = "pending";
 
-        // पेज लोड होते ही डेटा लाना
+        // ✅ FILE SIZE VALIDATOR: 400KB LIMIT (Called immediately on file select)
+        function validateFileSize(inputElement) {
+            const maxSize = 400 * 1024; // 400 KB
+            if (inputElement.files && inputElement.files[0]) {
+                const fileSize = inputElement.files[0].size;
+                if (fileSize > maxSize) {
+                    alert("⚠️ Error: फाइल बहुत बड़ी है! (Maximum: 400KB). कृपया छोटी फाइल चुनें।");
+                    inputElement.value = ''; // फाइल को तुरंत हटा देगा!
+                }
+            }
+        }
+
         async function checkAuthAndLoadData() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (!session) { window.location.href = 'index.html'; return; }
@@ -272,17 +285,23 @@
                 document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
                 currentKycStatus = userData.kyc_status;
                 
-                // अगर KYC पेंडिंग नहीं है, तो लाल अलर्ट छुपा दो
-                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                // ✅ STATUS DASHBOARD LOGIC (Urban Money / Andromeda Style)
+                if(currentKycStatus === 'pending') {
+                    document.getElementById('kycAlertBox').style.display = 'flex';     // Show Red Alert
+                    document.getElementById('kycPendingBox').style.display = 'none';
+                } else if(currentKycStatus === 'submitted') {
                     document.getElementById('kycAlertBox').style.display = 'none';
+                    document.getElementById('kycPendingBox').style.display = 'flex';   // Show Yellow Pending Alert
+                } else if(currentKycStatus === 'approved') {
+                    document.getElementById('kycAlertBox').style.display = 'none';
+                    document.getElementById('kycPendingBox').style.display = 'none';
+                    // Fully verified, no alerts needed
                 }
             }
         }
 
-        // KYC MODAL ओपन/क्लोज
         function openKYCModal() { 
             document.getElementById('kycModal').style.display = 'flex'; 
-            
             if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
                 document.getElementById('kycForm').style.display = 'none';
                 document.getElementById('kycAlreadySubmittedMsg').style.display = 'block';
@@ -293,7 +312,6 @@
         }
         function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
 
-        // KYC फॉर्म और फाइल अपलोड
         document.getElementById('kycForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -304,18 +322,17 @@
             const bankFile = document.getElementById('bankFile').files[0];
             const btn = document.getElementById('submitBtn');
 
-            // ✅ सही जगह: फाइल साइज़ चेक करने का लॉजिक (2MB = 2 * 1024 * 1024 bytes)
-            const maxSize = 2 * 1024 * 1024; 
+            // Double check validation before submit (Safety layer)
+            const maxSize = 400 * 1024;
             if (panFile.size > maxSize || aadhaarFile.size > maxSize || bankFile.size > maxSize) {
-                alert("⚠️ Error: कोई एक फाइल 2MB से बड़ी है! कृपया फाइल का साइज़ कम करके दोबारा अपलोड करें।");
-                return; // इसके आगे कोड नहीं बढ़ेगा
+                alert("⚠️ कोई एक फाइल 400KB से बड़ी है! कृपया चेक करें।");
+                return; 
             }
             
             btn.innerHTML = 'Uploading... <i class="fas fa-spinner fa-spin"></i>';
             btn.disabled = true;
 
             try {
-                // Supabase Storage में अपलोड
                 const uploadFile = async (file, fileType) => {
                     if (!file) return null;
                     const fileExt = file.name.split('.').pop();
@@ -330,7 +347,6 @@
                 const aadhaarUrl = await uploadFile(aadhaarFile, 'aadhaar');
                 const bankUrl = await uploadFile(bankFile, 'bank');
 
-                // Database अपडेट
                 const { error: dbError } = await supabaseClient
                     .from('dsa_partners')
                     .update({ 
@@ -345,7 +361,10 @@
                 alert("✅ Documents Submitted Successfully!");
                 currentKycStatus = 'submitted';
                 closeKYCModal();
-                document.getElementById('kycAlertBox').style.display = 'none'; 
+                
+                // Refresh UI Status instantly
+                document.getElementById('kycAlertBox').style.display = 'none';
+                document.getElementById('kycPendingBox').style.display = 'flex';
 
             } catch (error) {
                 alert("❌ Error: " + error.message);
@@ -355,7 +374,7 @@
             }
         });
 
-        // LEAD MODAL और बाकी फंक्शन
+        /* --- LEAD LOGIC --- */
         function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
         function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
 
@@ -381,7 +400,5 @@
 
         checkAuthAndLoadData();
     </script>
-
-
 </body>
 </html>
