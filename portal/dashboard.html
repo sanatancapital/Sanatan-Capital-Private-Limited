@@ -246,37 +246,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT (ALL LOGIC HERE) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        let currentUserEmail = "";
-        let currentKycStatus = "pending";
-
-        // पेज लोड होते ही डेटा लाना
-        async function checkAuthAndLoadData() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
-
-            currentUserEmail = session.user.email;
-            
-            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
-
-            if (userData) {
-                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
-                document.getElementById('userMobile').innerText = userData.mobile_number;
-                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
-                currentKycStatus = userData.kyc_status;
-                
-                // अगर KYC पेंडिंग नहीं है, तो लाल अलर्ट छुपा दो
-                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
-                    document.getElementById('kycAlertBox').style.display = 'none';
-                }
-            }
-        }
+    
     <!-- JAVASCRIPT (ALL LOGIC HERE) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
