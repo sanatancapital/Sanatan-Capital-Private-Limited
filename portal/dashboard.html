@@ -282,149 +282,174 @@
         </div>
     </div>
 
-    <!-- Supabase JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- यह कोड dashboard.html में सबसे नीचे </body> के ठीक ऊपर डालना है -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    const SUPABASE_URL = 'https://wkpoubvvpvolxzlzhfgt.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndrcG91YnZ2cHZvbHh6bHpoZmd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ3MjU3NzQsImV4cCI6MjEwMDMwMTc3NH0.DncM1ytnTmeup143FkX0q0iX-F5bPBJcXi9WKhHDEO8';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentUserEmail = "";
-        let currentKycStatus = "pending";
+    let currentUserEmail = "";
+    let currentKycStatus = "pending";
 
-        function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
+    function toggleMenu() { document.getElementById('sidebar').classList.toggle('show'); }
+
+    async function checkAuthAndLoadData() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) { window.location.href = 'index.html'; return; }
+
+        currentUserEmail = session.user.email;
         
-        function openKYCModal() { document.getElementById('kycModal').style.display = 'flex'; }
-        function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
+        const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
+
+        if (userData) {
+            document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
+            document.getElementById('userMobile').innerText = userData.mobile_number;
+            document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
+            currentKycStatus = userData.kyc_status;
+            
+            if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+                document.getElementById('kycAlertBox').style.display = 'none';
+            }
+        }
+    }
+
+    /* --- KYC MODAL & UPLOAD LOGIC --- */
+    function openKYCModal() { 
+        document.getElementById('kycModal').style.display = 'flex'; 
+        if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
+            document.getElementById('kycForm').style.display = 'none';
+            document.getElementById('kycAlreadySubmittedMsg').style.display = 'block';
+        } else {
+            document.getElementById('kycForm').style.display = 'block';
+            document.getElementById('kycAlreadySubmittedMsg').style.display = 'none';
+        }
+    }
+    function closeKYCModal() { document.getElementById('kycModal').style.display = 'none'; }
+
+    document.getElementById('kycForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
         
-        function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
-        function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
+        const pan = document.getElementById('panInput').value.toUpperCase();
+        const aadhaar = document.getElementById('aadhaarInput').value;
+        const panFile = document.getElementById('panFile').files[0];
+        const aadhaarFile = document.getElementById('aadhaarFile').files[0];
+        const bankFile = document.getElementById('bankFile').files[0];
+        const btn = document.getElementById('submitBtn');
+        
+        btn.innerHTML = 'Uploading Documents... <i class="fas fa-spinner fa-spin"></i>';
+        btn.disabled = true;
 
-        async function checkAuthAndLoadData() {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
-            if (!session) { window.location.href = 'index.html'; return; }
+        try {
+            const uploadFile = async (file, fileType) => {
+                if (!file) return null;
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${currentUserEmail.split('@')[0]}_${fileType}_${Date.now()}.${fileExt}`;
+                const { data, error } = await supabaseClient.storage.from('dsa_documents').upload(fileName, file);
+                if (error) throw error;
+                const { data: urlData } = supabaseClient.storage.from('dsa_documents').getPublicUrl(fileName);
+                return urlData.publicUrl;
+            };
 
-            currentUserEmail = session.user.email;
-            
-            const { data: userData } = await supabaseClient.from('dsa_partners').select('*').eq('email', currentUserEmail).single();
+            const panUrl = await uploadFile(panFile, 'pan');
+            const aadhaarUrl = await uploadFile(aadhaarFile, 'aadhaar');
+            const bankUrl = await uploadFile(bankFile, 'bank');
 
-            if (userData) {
-                document.getElementById('userName').innerHTML = 'Hello, ' + userData.full_name + '! 👋';
-                document.getElementById('userMobile').innerText = userData.mobile_number;
-                document.getElementById('userAvatar').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(userData.full_name) + '&background=1e3a8a&color=fff';
-                currentKycStatus = userData.kyc_status;
-                
-                if(currentKycStatus === 'submitted' || currentKycStatus === 'approved') {
-                    document.getElementById('kycAlertBox').style.display = 'none';
-                }
-            }
-        }
-
-        function checkKycForLead() {
-            if(currentKycStatus === 'pending') {
-                alert("❌ You cannot add leads yet. Please submit your KYC details first!");
-                openKYCModal();
-            } else if (currentKycStatus === 'submitted') {
-                alert("⏳ Your KYC is pending approval from Admin. Please wait.");
-            } else if (currentKycStatus === 'approved') {
-                openLeadModal(); 
-            }
-        }
-
-        function showDocumentFields() {
-            const loanType = document.getElementById('loanType').value;
-            const docSection = document.getElementById('documentSection');
-            const plDocs = document.getElementById('plDocs');
-            const blDocs = document.getElementById('blDocs');
-            const propDocs = document.getElementById('propDocs');
-
-            plDocs.style.display = 'none';
-            blDocs.style.display = 'none';
-            propDocs.style.display = 'none';
-
-            if(loanType === "") {
-                docSection.style.display = 'none';
-            } else {
-                docSection.style.display = 'block'; 
-                if(loanType === 'Personal Loan') { plDocs.style.display = 'block'; } 
-                else if(loanType === 'Business Loan') { blDocs.style.display = 'block'; } 
-                else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') { propDocs.style.display = 'block'; }
-            }
-        }
-
-        async function submitLead(statusType) {
-            // HTML5 Form Validation Trigger
-            const form = document.getElementById('leadForm');
-            if (!form.reportValidity()) {
-                return; // रुक जाएगा अगर कोई फील्ड गलत है या खाली है
-            }
-
-            const cName = document.getElementById('custName').value;
-            const cMobile = document.getElementById('custMobile').value;
-            const lType = document.getElementById('loanType').value;
-            const lAmt = document.getElementById('loanAmt').value;
-
-            const { error } = await supabaseClient
-                .from('leads')
-                .insert([
-                    { 
-                        customer_name: cName, 
-                        customer_mobile: cMobile, 
-                        loan_type: lType, 
-                        loan_amount: lAmt, 
-                        partner_email: currentUserEmail, 
-                        lead_status: statusType 
-                    }
-                ]);
-
-            if (error) {
-                alert("❌ Error saving lead: " + error.message);
-            } else {
-                if(statusType === 'Draft') {
-                    alert("💾 File Saved as Draft! You can upload documents later.");
-                } else {
-                    alert("✅ File Submitted Successfully! Sent to Admin for review.");
-                }
-                document.getElementById('leadForm').reset();
-                closeLeadModal();
-                showDocumentFields(); 
-            }
-        }
-
-        document.getElementById('kycForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const pan = document.getElementById('panInput').value.toUpperCase();
-            const aadhaar = document.getElementById('aadhaarInput').value;
-            const btn = document.getElementById('submitBtn');
-            
-            btn.innerHTML = 'Submitting... <i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
-            const { error } = await supabaseClient
+            const { error: dbError } = await supabaseClient
                 .from('dsa_partners')
-                .update({ pan_number: pan, aadhaar_number: aadhaar, kyc_status: 'submitted' })
+                .update({ 
+                    pan_number: pan, 
+                    aadhaar_number: aadhaar, 
+                    pan_doc: panUrl,
+                    aadhaar_doc: aadhaarUrl,
+                    bank_doc: bankUrl,
+                    kyc_status: 'submitted' 
+                })
                 .eq('email', currentUserEmail);
 
-            if (error) {
-                alert("❌ Error: " + error.message);
-                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
-                btn.disabled = false;
-            } else {
-                alert("✅ Details Submitted Successfully! Pending Admin Approval.");
-                currentKycStatus = 'submitted';
-                closeKYCModal();
-                document.getElementById('kycAlertBox').style.display = 'none'; 
-                btn.innerHTML = 'Submit for Approval <i class="fas fa-arrow-right"></i>';
-                btn.disabled = false;
-            }
-        });
+            if (dbError) throw dbError;
 
-        async function logoutUser() {
-            await supabaseClient.auth.signOut();
-            window.location.href = 'index.html';
+            alert("✅ All Documents & Details Submitted Successfully!");
+            currentKycStatus = 'submitted';
+            closeKYCModal();
+            document.getElementById('kycAlertBox').style.display = 'none'; 
+
+        } catch (error) {
+            alert("❌ Error: " + error.message);
+        } finally {
+            btn.innerHTML = 'Submit Documents <i class="fas fa-upload"></i>';
+            btn.disabled = false;
         }
+    });
 
-        checkAuthAndLoadData();
-    </script>
+    /* --- LEAD MODAL LOGIC --- */
+    function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
+    function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
+
+    function checkKycForLead() {
+        if(currentKycStatus === 'pending') {
+            alert("❌ You cannot add leads yet. Please submit your KYC details first!");
+            openKYCModal();
+        } else if (currentKycStatus === 'submitted') {
+            alert("⏳ Your KYC is pending approval from Admin. Please wait.");
+        } else if (currentKycStatus === 'approved') {
+            openLeadModal(); 
+        }
+    }
+
+    function showDocumentFields() {
+        const loanType = document.getElementById('loanType').value;
+        const docSection = document.getElementById('documentSection');
+        const plDocs = document.getElementById('plDocs');
+        const blDocs = document.getElementById('blDocs');
+        const propDocs = document.getElementById('propDocs');
+
+        plDocs.style.display = 'none';
+        blDocs.style.display = 'none';
+        propDocs.style.display = 'none';
+
+        if(loanType === "") {
+            docSection.style.display = 'none';
+        } else {
+            docSection.style.display = 'block'; 
+            if(loanType === 'Personal Loan') { plDocs.style.display = 'block'; } 
+            else if(loanType === 'Business Loan') { blDocs.style.display = 'block'; } 
+            else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') { propDocs.style.display = 'block'; }
+        }
+    }
+
+    async function submitLead(statusType) {
+        const form = document.getElementById('leadForm');
+        if (!form.reportValidity()) return;
+
+        const cName = document.getElementById('custName').value;
+        const cMobile = document.getElementById('custMobile').value;
+        const lType = document.getElementById('loanType').value;
+        const lAmt = document.getElementById('loanAmt').value;
+
+        const { error } = await supabaseClient.from('leads').insert([{ 
+            customer_name: cName, customer_mobile: cMobile, loan_type: lType, 
+            loan_amount: lAmt, partner_email: currentUserEmail, lead_status: statusType 
+        }]);
+
+        if (error) {
+            alert("❌ Error saving lead: " + error.message);
+        } else {
+            alert(statusType === 'Draft' ? "💾 File Saved as Draft!" : "✅ File Submitted Successfully!");
+            document.getElementById('leadForm').reset();
+            closeLeadModal();
+            showDocumentFields(); 
+        }
+    }
+
+    async function logoutUser() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    }
+
+    checkAuthAndLoadData();
+</script>
+
+
 </body>
 </html>
