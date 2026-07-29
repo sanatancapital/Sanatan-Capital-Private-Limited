@@ -4,7 +4,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// 2. Form Switcher
+// 2. Form Switcher (लॉगिन और रजिस्टर फॉर्म बदलने के लिए)
 function switchForm(formName) {
     document.getElementById('login-box').classList.remove('active');
     document.getElementById('register-box').classList.remove('active');
@@ -19,7 +19,7 @@ function switchForm(formName) {
     }
 }
 
-// 3. Register Form Submit
+// 3. Register Form Submit (नया अकाउंट बनाने के लिए)
 document.getElementById('registerForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const emailInput = this.querySelector('input[type="email"]').value;
@@ -42,7 +42,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     }
 });
 
-// 4. Login Form Submit
+// 4. Login Form Submit (पुराने अकाउंट में जाने के लिए)
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const emailInput = this.querySelector('input[type="text"]').value;
@@ -65,7 +65,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     }
 });
 
-// 5. OTP Verification
+// 5. OTP Verification (OTP चेक करके डैशबोर्ड पर भेजने के लिए)
 document.getElementById('otpForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const otpInput = this.querySelector('input[type="text"]').value;
@@ -91,87 +91,3 @@ document.getElementById('otpForm').addEventListener('submit', async function(e) 
         window.location.href = "dashboard.html";
     }
 });
-
-        // लीड फॉर्म खोलने और बंद करने का फंक्शन
-        function openLeadModal() { document.getElementById('leadModal').style.display = 'flex'; }
-        function closeLeadModal() { document.getElementById('leadModal').style.display = 'none'; }
-
-        // KYC चेक करने वाले फंक्शन को अपडेट करें (ताकि लीड फॉर्म खुले)
-        function checkKycForLead() {
-            if(currentKycStatus === 'pending') {
-                alert("❌ You cannot add leads yet. Please submit your KYC details first!");
-                openKYCModal();
-            } else if (currentKycStatus === 'submitted') {
-                alert("⏳ Your KYC is pending approval from Admin. Please wait.");
-            } else if (currentKycStatus === 'approved') {
-                openLeadModal(); // अगर KYC डन है तो लीड फॉर्म खोलें
-            }
-        }
-
-        // लोन टाइप के हिसाब से डॉक्यूमेंट बदलने का लॉजिक
-        function showDocumentFields() {
-            const loanType = document.getElementById('loanType').value;
-            const docSection = document.getElementById('documentSection');
-            const plDocs = document.getElementById('plDocs');
-            const blDocs = document.getElementById('blDocs');
-            const propDocs = document.getElementById('propDocs');
-
-            // पहले सबको छुपा दें
-            plDocs.style.display = 'none';
-            blDocs.style.display = 'none';
-            propDocs.style.display = 'none';
-
-            if(loanType === "") {
-                docSection.style.display = 'none';
-            } else {
-                docSection.style.display = 'block'; // कॉमन सेक्शन दिखाएं
-                
-                if(loanType === 'Personal Loan') {
-                    plDocs.style.display = 'block';
-                } else if(loanType === 'Business Loan') {
-                    blDocs.style.display = 'block';
-                } else if(loanType === 'Home Loan' || loanType === 'Loan Against Property') {
-                    propDocs.style.display = 'block';
-                }
-            }
-        }
-
-        // फाइल को डेटाबेस में सेव या सबमिट करने का फंक्शन
-        async function submitLead(statusType) {
-            const cName = document.getElementById('custName').value;
-            const cMobile = document.getElementById('custMobile').value;
-            const lType = document.getElementById('loanType').value;
-            const lAmt = document.getElementById('loanAmt').value;
-
-            if(!cName || !cMobile || !lType || !lAmt) {
-                alert("⚠️ Please fill all mandatory fields (Name, Mobile, Loan Type, Amount).");
-                return;
-            }
-
-            // Supabase 'leads' टेबल में डेटा डालना
-            const { error } = await supabaseClient
-                .from('leads')
-                .insert([
-                    { 
-                        customer_name: cName, 
-                        customer_mobile: cMobile, 
-                        loan_type: lType, 
-                        loan_amount: lAmt, 
-                        partner_email: currentUserEmail, 
-                        lead_status: statusType // 'Draft' या 'Pending'
-                    }
-                ]);
-
-            if (error) {
-                alert("❌ Error saving lead: " + error.message);
-            } else {
-                if(statusType === 'Draft') {
-                    alert("💾 File Saved as Draft! You can upload documents later.");
-                } else {
-                    alert("✅ File Submitted Successfully! Sent to Admin for review.");
-                }
-                document.getElementById('leadForm').reset();
-                closeLeadModal();
-                showDocumentFields(); // डॉक्यूमेंट सेक्शन वापस छुपाने के लिए
-            }
-        }
