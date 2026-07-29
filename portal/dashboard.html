@@ -151,26 +151,52 @@
             <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details exactly as per your documents.</p>
             
             <form id="kycForm">
+    <!-- STRICT VALIDATED KYC MODAL WITH FILE UPLOADS -->
+    <div id="kycModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeKYCModal()">&times;</span>
+            <h3>Submit KYC Details</h3>
+            <p style="margin-bottom: 20px; color: var(--text-muted); font-size: 0.9rem;">Please enter details and upload clear documents.</p>
+            
+            <!-- यह मैसेज तब दिखेगा जब KYC पहले से जमा हो -->
+            <div id="kycAlreadySubmittedMsg" style="display: none; text-align: center; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; color: #166534;">
+                <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                <h4>Details Already Submitted!</h4>
+                <p style="font-size: 0.9rem; margin-top: 5px;">Your KYC documents are safely stored in our system.</p>
+            </div>
+
+            <!-- KYC फॉर्म -->
+            <form id="kycForm">
                 <div class="input-group">
                     <label>PAN Card Number <span style="color: red;">*</span></label>
-                    <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" 
-                           pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" minlength="10" maxlength="10" 
-                           oninput="this.value = this.value.toUpperCase(); this.setCustomValidity('')" 
-                           oninvalid="this.setCustomValidity('कृपया सही 10 अंकों का PAN दर्ज करें (उदा: ABCDE1234F)')" required>
+                    <input type="text" id="panInput" placeholder="Ex: ABCDE1234F" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" minlength="10" maxlength="10" oninput="this.value = this.value.toUpperCase();" required>
                 </div>
                 <div class="input-group">
-                    <label>Aadhaar Number <span style="color: red;">*</span></label>
-                    <input type="text" id="aadhaarInput" placeholder="12 Digit Number" 
-                           pattern="\d{12}" minlength="12" maxlength="12" 
-                           oninput="this.value = this.value.replace(/[^0-9]/g, ''); this.setCustomValidity('')" 
-                           oninvalid="this.setCustomValidity('आधार 12 अंकों का ही होना चाहिए')" required>
+                    <label>Upload PAN Card (PDF/JPG) <span style="color: red;">*</span></label>
+                    <input type="file" id="panFile" accept=".pdf, .jpg, .jpeg, .png" required>
                 </div>
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    Submit for Approval <i class="fas fa-arrow-right"></i>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Aadhaar Number <span style="color: red;">*</span></label>
+                    <input type="text" id="aadhaarInput" placeholder="12 Digit Number" pattern="\d{12}" minlength="12" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '');" required>
+                </div>
+                <div class="input-group">
+                    <label>Upload Aadhaar (Front & Back) <span style="color: red;">*</span></label>
+                    <input type="file" id="aadhaarFile" accept=".pdf, .jpg, .jpeg, .png" required>
+                </div>
+
+                <div class="input-group" style="margin-top: 15px;">
+                    <label>Bank Proof (Passbook / Cancelled Cheque) <span style="color: red;">*</span></label>
+                    <input type="file" id="bankFile" accept=".pdf, .jpg, .jpeg, .png" required>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn" style="margin-top: 15px;">
+                    Submit Documents <i class="fas fa-upload"></i>
                 </button>
             </form>
         </div>
     </div>
+
 
     <!-- STRICT VALIDATED LEAD MODAL -->
     <div id="leadModal" class="modal">
